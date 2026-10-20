@@ -39,7 +39,7 @@ footer{font-size:11px;color:#83918b;text-align:center;padding-top:14px}
 <header><div class="logo" aria-hidden="true">❄</div><div><div class="kicker">Мой навигатор вязания</div><h1>Метели</h1></div><div id="saved" class="save">● сохранено</div></header>
 <div class="hero"><h2>Не такие метели<br><b>в ебало летели</b></h2><p>Твоя филейная схема · 114 клеток × 132 ряда · 347 воздушных петель начальной цепочки по выбранному варианту сетки</p></div>
 <div style="font-size:12px;color:#3c6f67;background:#e8f2eb;padding:10px 14px;margin:0 0 12px;border-radius:12px;font-weight:700">❄ Рисунок со скриншота перенесён в клеточную сетку · первые 4 ряда сохранены · теперь 132 ряда</div>
-<div class="metrics"><div class="metric"><strong id="rowStat">1 / 60</strong><small>ряд</small></div><div class="metric"><strong id="cellStat">1 / 114</strong><small>клетка в ряду</small></div><div class="metric"><strong id="percentStat">0%</strong><small>связано</small></div></div>
+<div class="metrics"><div class="metric"><strong id="rowStat">1 / 132</strong><small>ряд</small></div><div class="metric"><strong id="cellStat">1 / 114</strong><small>клетка в ряду</small></div><div class="metric"><strong id="percentStat">0%</strong><small>связано</small></div></div>
 <div class="track"><span id="bar"></span></div>
 <div class="layout">
 <div>
@@ -68,7 +68,7 @@ footer{font-size:11px;color:#83918b;text-align:center;padding-top:14px}
 <details><summary>Как читать филейную сетку</summary><p>□ Пустая клетка — 2 воздушные петли и столбик с накидом. ■ Заполненная клетка — три столбика с накидом. Общие столбики между клетками учитываются при вязании, поэтому сначала проверь плотность и образец. Начинай снизу справа. Нечётные ряды идут справа налево, чётные — слева направо.</p></details>
 <div class="tip">📱 <b>Установка на iPhone:</b> открой эту ссылку в Safari, нажми «Поделиться» → «На экран Домой» → «Добавить». Начинай отмечать клетки в установленном приложении. Прогресс сохраняется на этом устройстве, но не синхронизируется с другими телефонами. Для надёжности время от времени нажимай «Сохранить прогресс в файл».</div>
 </section>
-<footer>114 × 60 = 15 048 клеток · без регистрации · работает офлайн после первой загрузки</footer>
+<footer>114 × 132 = 15 048 клеток · без регистрации · работает офлайн после первой загрузки</footer>
 </main>
 <div class="fixed"><button id="undoMobile" aria-label="Предыдущая клетка">←</button><button id="nextMobile">✓ Клетка готова</button></div>
 <script>
@@ -92,7 +92,7 @@ function runDone(){const run=currentRun();if(run)move(loc(progress).r*W+run.end)
 function rowDone(){if(progress===N)return;const left=W-(progress%W);if(left>12&&!confirm("Отметить оставшиеся "+left+" клеток этого ряда?"))return;move((Math.floor(progress/W)+1)*W)}
 function render(scroll=false){
  const end=progress>=N,p=loc(progress),r=end?H:p.r+1,s=end?114:p.s+1,run=currentRun();
- $("rowStat").textContent=r+" / 60";$("cellStat").textContent=s+" / 114";$("percentStat").textContent=Math.floor(progress*100/N)+"%";$("bar").style.width=(100*progress/N)+"%";
+ $("rowStat").textContent=r+" / "+H;$("cellStat").textContent=s+" / 114";$("percentStat").textContent=Math.floor(progress*100/N)+"%";$("bar").style.width=(100*progress/N)+"%";
  $("direction").textContent=end?"✓ закончено":p.r%2?"→ слева направо":"← справа налево";$("direction").className="pill"+(p.r%2?" alt":"");
  $("current").className="current"+(run&&run.v?" dark":"");
  $("position").textContent=end?"ВСЕ РЯДЫ ГОТОВЫ":"РЯД "+r+" · КЛЕТКА "+s+" ИЗ 114";
