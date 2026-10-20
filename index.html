@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#153b3f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Метели">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="Вязальный навигатор: точная схема 114 × 60 клеток с подсветкой и сохранением прогресса.">
+<title>Метели — вязальный навигатор</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="./icon.svg">
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:#19393d;background:#f5f3ec;font-size:15px}
+*{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}button:disabled{opacity:.35;cursor:default}button:focus-visible,input:focus-visible{outline:3px solid #d48d69;outline-offset:3px}h1,h2,h3,p{margin:0}
+#app{max-width:1040px;padding:14px 14px 112px;margin:auto}header{display:flex;align-items:center;gap:11px;margin-bottom:15px}.logo{width:49px;height:49px;border-radius:15px;background:#173c40;color:white;display:grid;place-items:center;font-size:30px}h1{font:normal 29px/1.1 Georgia,serif}.kicker{font-size:11px;color:#508178;font-weight:800;text-transform:uppercase;letter-spacing:.16em}.save{margin-left:auto;color:#527c71;font-weight:700;font-size:12px}
+.hero{background:#163a40;color:#fff;border-radius:20px;padding:21px;margin-bottom:14px;position:relative;overflow:hidden}.hero h2{font:normal clamp(22px,4.5vw,32px)/1.17 Georgia,serif;margin:0 0 7px}.hero b{color:#ffcf9d}.hero p{font-size:12px;color:#d5e6e0;line-height:1.5}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.metric{background:#fffefa;border:1px solid #d9e2da;border-radius:15px;padding:12px 14px}.metric strong{font-size:25px;letter-spacing:-.06em;font-variant-numeric:tabular-nums;display:block}.metric small{font-size:11px;color:#6f8683}.track{background:#dbe5dd;border-radius:100px;height:8px;margin:12px 0 17px;overflow:hidden}.track span{height:100%;display:block;background:#357b76;width:0%;transition:width .2s}
+.layout{display:grid;grid-template-columns:1.05fr .95fr;gap:15px;align-items:start}.card{background:#fffefa;border:1px solid #dce4dc;border-radius:19px;padding:17px;margin-bottom:14px;min-width:0;box-shadow:0 5px 25px #223b3d0b}
+.cardhead{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:13px}.card h3{font-size:17px}.pill{border-radius:25px;padding:7px 11px;font-size:12px;font-weight:800;color:#2c665e;background:#e2f0e9;white-space:nowrap}.pill.alt{background:#f9ebe4;color:#a95b44}
+.current{background:#e5f1ea;border-radius:16px;padding:18px;margin-bottom:14px}.current.dark{background:#f8e8df}.tiny{font-size:11px;letter-spacing:.09em;font-weight:800;color:#648078}.current .value{font-size:27px;font-weight:900;line-height:1.15;margin:6px 0}.current .instruction{font-size:15px;line-height:1.45}.current .hint{margin-top:10px;font-size:12px;color:#617b76}
+.spread{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.spread b{font-size:13px}.muted{color:#788b87;font-size:12px;line-height:1.45}
+#strip{display:grid;grid-template-columns:repeat(15,minmax(0,1fr));gap:3px;padding:7px 1px 0;margin-bottom:10px}.px{aspect-ratio:1;border:1.5px solid #adbfba;background:#fffefa;border-radius:4px;min-width:0;position:relative}.px.filled{background:#153b3f;border-color:#153b3f}.px.completed{background:#d6e5dc;border-color:#cbd8d1}.px.filled.completed{background:#94aaa4;border-color:#94aaa4}.px.active{outline:3px solid #c56c51;outline-offset:1px;z-index:2}.px.blank{visibility:hidden}
+.near{border-radius:13px;overflow:auto;border:1px solid #d8e3dc;background:white;max-width:100%}.near canvas{display:block;image-rendering:pixelated}
+.actions{display:grid;grid-template-columns:86px 1fr;gap:9px;margin-top:15px}.actions button{border:0;border-radius:14px;min-height:57px;font-weight:850}.primary{color:white;background:#2c716d}.secondary{background:#eaf0e9;color:#275054}.twobuttons{display:flex;gap:8px;margin-top:8px}.twobuttons button{flex:1;min-height:43px;border:1px solid #ccdcd3;border-radius:12px;background:#fffefa;color:#315f5c;font-size:12px;font-weight:800}
+.jump{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-top:13px}.jump label{display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:750;color:#667f7b}.jump input{width:75px;border:1px solid #bdcec6;border-radius:9px;padding:9px;background:white;font-size:16px}.jump button,.toolbuttons button{background:#173c40;border:0;border-radius:9px;color:#fff;padding:10px 13px;font-size:12px;font-weight:750}
+.canvaswrap{max-height:470px;overflow:auto;border:1px solid #d7e2da;border-radius:11px;overscroll-behavior:contain;background:white}#chart{display:block;image-rendering:pixelated}.legend{display:flex;flex-wrap:wrap;gap:13px;color:#69817e;font-size:11px;margin:10px 0}.sq{display:inline-block;width:12px;height:12px;border:1px solid #9cafaa;vertical-align:-2px;margin-right:4px}.sq.f{background:#173c40}.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.tools button{border-radius:10px;padding:10px 12px;background:white;color:#2b5e5a;border:1px solid #cfddd6;font-size:12px;font-weight:750}.tools button:active{background:#e3f0e9}
+.runlist{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}.runlist button{font-size:12px;padding:8px;border-radius:9px;background:#eaf1ed;border:1px solid #d1ddd5;color:#234c4c}.runlist .isnow{background:#244c4f;color:white}.runlist .past{opacity:.48;text-decoration:line-through}
+details{border:1px solid #dce3db;border-radius:12px;margin-top:13px;padding:10px;font-size:13px;line-height:1.55}summary{font-weight:800;cursor:pointer}.tip{background:#ebf4ed;border-radius:12px;padding:12px;margin-top:10px;font-size:12px;line-height:1.6}
+.fixed{display:none}.focus .hero,.focus .secondarypanel{display:none}.focus .layout{grid-template-columns:1fr}.focus #app{max-width:720px}.focus #toggleMode{background:#204c4e;color:white}
+footer{font-size:11px;color:#83918b;text-align:center;padding-top:14px}
+@media(max-width:780px){#app{padding:12px 11px 118px}.layout{grid-template-columns:1fr}.hero{padding:16px}.hero h2{font-size:23px}.card{padding:14px}.metrics{gap:7px}.metric{padding:9px}.metric strong{font-size:22px}.metric small{font-size:10px}.current{padding:15px}.current .value{font-size:24px}.fixed{position:fixed;z-index:15;bottom:0;left:0;right:0;display:flex;gap:9px;padding:9px 12px calc(9px + env(safe-area-inset-bottom));background:#fffefaf5;border-top:1px solid #ceddd2;backdrop-filter:blur(12px)}.fixed button{height:54px;border:0;border-radius:12px;font-size:16px;font-weight:850}.fixed #undoMobile{width:66px;background:#e6eee6;color:#29575a}.fixed #nextMobile{flex:1;background:#2c716d;color:white}.actions{display:none}header h1{font-size:25px}.pill{font-size:10px}#strip{gap:2px}}
+@media print{header .save,.actions,.fixed,.tools,.jump,.hero,.secondarypanel .tools,.tip{display:none!important}#app{padding:0}.layout{display:block}.canvaswrap{max-height:none;overflow:visible}#chart{max-width:100%;height:auto}body{background:white}}
+</style>
+</head>
+<body>
+<main id="app">
+<header><div class="logo" aria-hidden="true">❄</div><div><div class="kicker">Мой навигатор вязания</div><h1>Метели</h1></div><div id="saved" class="save">● сохранено</div></header>
+<div class="hero"><h2>Не такие метели<br><b>в ебало летели</b></h2><p>Твоя филейная схема · 114 клеток × 60 рядов · 347 воздушных петель начальной цепочки по выбранному варианту сетки</p></div>
+<div class="metrics"><div class="metric"><strong id="rowStat">1 / 60</strong><small>ряд</small></div><div class="metric"><strong id="cellStat">1 / 114</strong><small>клетка в ряду</small></div><div class="metric"><strong id="percentStat">0%</strong><small>связано</small></div></div>
+<div class="track"><span id="bar"></span></div>
+<div class="layout">
+<div>
+<section class="card">
+<div class="cardhead"><h3>Что вязать сейчас</h3><span id="direction" class="pill">← справа налево</span></div>
+<div id="current" class="current"><div class="tiny" id="position">РЯД 1 · КЛЕТКА 1</div><div class="value" id="cellName">ПУСТАЯ □</div><div class="instruction" id="how">2 воздушные петли + 1 столбик с накидом</div><div class="hint" id="sequence">Дальше 10 пустых клеток подряд</div></div>
+<div class="spread"><b>Ближайшие клетки</b><span class="muted">красная рамка — сейчас</span></div>
+<div id="strip" aria-label="Ближайшие клетки схемы"></div>
+<div class="spread"><b>Увеличенный фрагмент</b><span id="nearLabel" class="muted">текущий участок</span></div>
+<div class="near"><canvas id="nearby" role="img" aria-label="Увеличенная схема текущего участка"></canvas></div>
+<div class="actions"><button id="undo" class="secondary">← Назад</button><button id="next" class="primary">✓ Клетка готова</button></div>
+<div class="twobuttons"><button id="runDone">✓ Весь одинаковый участок</button><button id="rowDone">✓ До конца ряда</button></div>
+<p class="muted" style="margin-top:9px">После последней клетки ряда приложение автоматически меняет направление следующего ряда.</p>
+<div class="jump"><label>Номер ряда<input id="jumpRow" type="number" min="1" max="60" value="1" inputmode="numeric"></label><label>Клетка<input id="jumpCell" type="number" min="1" max="114" value="1" inputmode="numeric"></label><button id="jump">Перейти</button></div>
+</section>
+<section class="card"><div class="cardhead"><h3>Участки текущего ряда</h3></div><p class="muted">Нажми на нужный участок, чтобы перейти к нему.</p><div id="runs" class="runlist"></div></section>
+</div>
+<div class="secondarypanel">
+<section class="card"><div class="cardhead"><h3>Вся схема</h3><button id="find" class="secondary" style="border:0;border-radius:10px;padding:9px 11px">Найти клетку</button></div><div class="legend"><span><i class="sq"></i>Пустая клетка</span><span><i class="sq f"></i>Заполненная клетка</span><span>Красная рамка — текущая</span></div><div class="canvaswrap" id="chartWrap"><canvas id="chart" aria-label="Полная схема с подсветкой прогресса"></canvas></div><label class="muted" style="display:block;margin-top:12px">Масштаб <input id="zoom" type="range" min="7" max="23" value="12" style="width:75%;vertical-align:middle;accent-color:#2c716d"></label></section>
+</div>
+</div>
+<section class="card">
+<div class="cardhead"><h3>Настройки и прогресс</h3></div>
+<div class="tools"><button id="toggleMode">Режим вязания</button><button id="download">↓ Сохранить прогресс в файл</button><button id="upload">↑ Восстановить прогресс</button><button id="wake">☀ Не гасить экран</button><button id="reset">Начать заново</button><button id="print">Печать схемы</button></div>
+<input id="restoreFile" type="file" accept=".json,application/json" hidden>
+<details><summary>Как читать филейную сетку</summary><p>□ Пустая клетка — 2 воздушные петли и столбик с накидом. ■ Заполненная клетка — три столбика с накидом. Общие столбики между клетками учитываются при вязании, поэтому сначала проверь плотность и образец. Начинай снизу справа. Нечётные ряды идут справа налево, чётные — слева направо.</p></details>
+<div class="tip">📱 <b>Установка на iPhone:</b> открой эту ссылку в Safari, нажми «Поделиться» → «На экран Домой» → «Добавить». Начинай отмечать клетки в установленном приложении. Прогресс сохраняется на этом устройстве, но не синхронизируется с другими телефонами. Для надёжности время от времени нажимай «Сохранить прогресс в файл».</div>
+</section>
+<footer>114 × 60 = 6 840 клеток · без регистрации · работает офлайн после первой загрузки</footer>
+</main>
+<div class="fixed"><button id="undoMobile" aria-label="Предыдущая клетка">←</button><button id="nextMobile">✓ Клетка готова</button></div>
+<script>
+(function(){
+"use strict";
+const W=114,H=60,N=W*H,B64="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATnOc5znOc5znOc5zmAAAAAAAAAAAAAAAAAAAAACAwGAwGA0GAwGAwGAAAABAAAAAAOAAAAAAgAAAADgAAAABEQAAAABwAAAAJIAAAAAkgAAAAEkAAAAFQAAAAAVAAAAACoAAAATkAAAACOIAAAAJyAAAA/+AAAAH/8AAAAf/AAAATkAAAACOIAAAAJyAAAAFQAAAAAVAAAAACoAAAAJIAAAAAkgAAAAEkAAAADgAAAABEQAAAABwAAAABAAAAAAOAAAAAAgAAAAAAAAAAAEAAAAAAAAACAAAAAAAAAAAAAAAAAQCAAAAAAAAAAAAAAAAAQCgIvg+cii+CL7746IBQAgIoAIikmgDaAiBKYBAAAIoAIioqgCqAiBKoAAAgPvAI+wq8CrwjyKoBADQIoAIioygCKAiCLICwCoIoAIikigCKAiCKIFQDwIvgIiii+CL4j6KIDwAgAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAQCAAAAAAAAAAAAAAAAAQCgAAAAAAAAAAAAAAABQAgAAAAAAAAAAAAAAABAAAB4H3zhzgHfffHRAAAAABEEEESUQJQEQJTAAACABEEEESUQJQEQJVAAQCgB4Hnn0UQReEeRVABQDwBEEEUUUQRQEQRZADwCoBEEEUUUQRQEQRRAFQBQB4H3kUTgRfEfRRACgAgAAAAAAAAAAAAAAABACAAAAAAAAAAAAAAAAAQCAAAAAAAAEAAAAAAAAQCgBAAAAAAOAAAAAAgBQAADgAAAABEQAAAABwAAAAJIAAAAAkgAAAAEkAAAAFQAAAAAVAAAAACoAAAATkAAAACOIAAAAJyAAAA/+AAAAH/8AAAAf/AAAATkAAAACOIAAAAJyAAAAFQAAAAAVAAAAACoAAAAJIAAAAAkgAAAAEkAAAADgAAAABEQAAAABwAAACBwGAwGA+GAwGAwmAAAAAAAAAAAEAAAAAAAAAATnOc5znOc5znOc5zmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const bytes=Uint8Array.from(atob(B64),c=>c.charCodeAt(0));
+const bit=(x,y)=>{const n=y*W+x;return (bytes[n>>3]>>(7-(n&7)))&1;};
+const $=id=>document.getElementById(id);
+const safe=(n,lo,hi)=>Math.min(hi,Math.max(lo,Math.trunc(Number(n)||0)));
+const KEY="meteli-pattern-114x60-progress-v1";
+let progress=0,zoom=12,focused=false,lock=null;
+try{progress=safe(localStorage.getItem(KEY),0,N)}catch(e){$("saved").textContent="⚠ сохранение недоступно";}
+const loc=(idx)=>{const r=Math.min(H-1,Math.floor(idx/W)),s=idx>=N?W-1:idx%W;return{r,s,x:r%2?s:W-1-s,y:H-1-r}};
+const ink=(r,s)=>bit(r%2?s:W-1-s,H-1-r);
+const currentRun=()=>{if(progress>=N)return null;const p=loc(progress);let end=p.s+1;const v=ink(p.r,p.s);while(end<W&&ink(p.r,end)===v)end++;return{end,v,remaining:end-p.s}};
+const save=()=>{try{localStorage.setItem(KEY,String(progress));$("saved").textContent="✓ сохранено"}catch(e){$("saved").textContent="⚠ ошибка сохранения"}};
+function move(idx){progress=safe(idx,0,N);save();render(true)}
+function change(d){move(progress+d)}
+function runDone(){const run=currentRun();if(run)move(loc(progress).r*W+run.end)}
+function rowDone(){if(progress===N)return;const left=W-(progress%W);if(left>12&&!confirm("Отметить оставшиеся "+left+" клеток этого ряда?"))return;move((Math.floor(progress/W)+1)*W)}
+function render(scroll=false){
+ const end=progress>=N,p=loc(progress),r=end?60:p.r+1,s=end?114:p.s+1,run=currentRun();
+ $("rowStat").textContent=r+" / 60";$("cellStat").textContent=s+" / 114";$("percentStat").textContent=Math.floor(progress*100/N)+"%";$("bar").style.width=(100*progress/N)+"%";
+ $("direction").textContent=end?"✓ закончено":p.r%2?"→ слева направо":"← справа налево";$("direction").className="pill"+(p.r%2?" alt":"");
+ $("current").className="current"+(run&&run.v?" dark":"");
+ $("position").textContent=end?"ВСЕ РЯДЫ ГОТОВЫ":"РЯД "+r+" · КЛЕТКА "+s+" ИЗ 114";
+ $("cellName").textContent=end?"ПАННО ГОТОВО ❄":run.v?"ЗАПОЛНЕННАЯ ■":"ПУСТАЯ □";
+ $("how").textContent=end?"Все 6 840 клеток отмечены!":run.v?"3 столбика с накидом":"2 воздушные петли + 1 столбик с накидом";
+ $("sequence").textContent=end?"Сделай резервную копию результата":run.remaining+" "+(run.v?"заполненных":"пустых")+" клеток подряд, включая текущую";
+ $("jumpRow").value=r;$("jumpCell").value=s;
+ ["next","nextMobile","runDone","rowDone"].forEach(id=>$(id).disabled=end);
+ ["undo","undoMobile"].forEach(id=>$(id).disabled=progress===0);
+ const nextlabel=end?"✓ Готово":s===114?"✓ Повернуть на новый ряд":"✓ Клетка готова";$("next").textContent=$("nextMobile").textContent=nextlabel;
+ drawStrip();drawNear();drawRuns();drawFull();
+ if(scroll){const c=$("chartWrap");if(!focused&&c.clientWidth){const px=36+p.x*zoom,py=27+p.y*zoom;if(px<c.scrollLeft+zoom||px>c.scrollLeft+c.clientWidth-zoom)c.scrollLeft=Math.max(0,px-c.clientWidth/2);if(py<c.scrollTop+zoom||py>c.scrollTop+c.clientHeight-zoom)c.scrollTop=Math.max(0,py-c.clientHeight/2);}}
+}
+function drawStrip(){const host=$("strip");host.replaceChildren();for(let d=-4;d<=10;d++){const idx=progress+d;const b=document.createElement("button");b.type="button";b.className="px";if(idx<0||idx>=N)b.classList.add("blank");else{const q=loc(idx);if(bit(q.x,q.y))b.classList.add("filled");if(idx<progress)b.classList.add("completed");if(idx===progress)b.classList.add("active");b.title="Ряд "+(q.r+1)+", клетка "+(q.s+1);b.setAttribute("aria-label",b.title);b.onclick=()=>{if(Math.abs(idx-progress)>1&&!confirm("Перейти к этой клетке?"))return;move(idx)}}host.appendChild(b)}}
+function drawNear(){const c=$("nearby"),ctx=c.getContext("2d"),p=loc(progress),s=25,cols=13,rows=5,left=safe(p.x-6,0,W-cols),top=safe(p.y-2,0,H-rows),ox=37,oy=23;c.width=ox+s*cols+5;c.height=oy+s*rows+10;ctx.fillStyle="#fffefa";ctx.fillRect(0,0,c.width,c.height);ctx.textAlign="right";ctx.font="bold 12px system-ui";for(let j=0;j<rows;j++){let y=top+j,r=H-1-y;ctx.fillStyle="#587c76";ctx.fillText(String(r+1),ox-8,oy+j*s+17);for(let i=0;i<cols;i++){const x=left+i,step=r%2?x:W-1-x,done=r*W+step<progress,filled=bit(x,y);ctx.fillStyle=done?(filled?"#8ca7a0":"#e0e9e2"):(filled?"#193b40":"#fffdfa");ctx.fillRect(ox+i*s,oy+j*s,s,s);ctx.strokeStyle="#cad7ce";ctx.lineWidth=1;ctx.strokeRect(ox+i*s+.5,oy+j*s+.5,s,s);if(progress<N&&x===p.x&&y===p.y){ctx.strokeStyle="#c66c4c";ctx.lineWidth=4;ctx.strokeRect(ox+i*s+2,oy+j*s+2,s-4,s-4);ctx.lineWidth=1}}}ctx.textAlign="center";ctx.fillStyle="#597b74";ctx.font="10px system-ui";for(let i=0;i<cols;i+=2)ctx.fillText(left+i+1,ox+(i+.5)*s,oy-7);$("nearLabel").textContent="ряды "+(H-top-rows+1)+"–"+(H-top);}
+function drawRuns(){const host=$("runs"),p=loc(progress);host.replaceChildren();let start=0;while(start<W){const v=ink(p.r,start),a=start;while(start<W&&ink(p.r,start)===v)start++;const b=document.createElement("button");b.textContent=(start-a)+" "+(v?"■ заполн.":"□ пуст.");const from=p.r*W+a,to=p.r*W+start;b.className=progress>=to?"past":progress>=from&&progress<to?"isnow":"";b.onclick=()=>{if(Math.abs(from-progress)>1&&!confirm("Перейти к началу этого участка?"))return;move(from)};host.appendChild(b)}}
+function drawFull(){const c=$("chart"),ctx=c.getContext("2d"),ox=36,oy=27,p=loc(progress),s=zoom;c.width=ox+W*s+10;c.height=oy+H*s+10;ctx.fillStyle="#fffdf9";ctx.fillRect(0,0,c.width,c.height);for(let y=0;y<H;y++){const r=H-1-y;for(let x=0;x<W;x++){const idx=r*W+(r%2?x:W-1-x),v=bit(x,y);ctx.fillStyle=idx<progress?(v?"#91aba3":"#e4eee7"):(v?"#193b40":"#fffefa");ctx.fillRect(ox+x*s,oy+y*s,s,s)}}ctx.beginPath();for(let x=0;x<=W;x++){ctx.moveTo(ox+x*s+.5,oy);ctx.lineTo(ox+x*s+.5,oy+H*s)}for(let y=0;y<=H;y++){ctx.moveTo(ox,oy+y*s+.5);ctx.lineTo(ox+W*s,oy+y*s+.5)}ctx.strokeStyle="#ced8d0";ctx.lineWidth=.7;ctx.stroke();ctx.fillStyle="#657d76";ctx.font="11px system-ui";ctx.textAlign="center";for(let x=0;x<W;x+=10)ctx.fillText(x+1,ox+(x+.5)*s,oy-9);ctx.textAlign="right";for(let y=0;y<H;y+=5)ctx.fillText(H-y,ox-6,oy+(y+.75)*s);if(progress<N){ctx.strokeStyle="#c8654c";ctx.lineWidth=3;ctx.strokeRect(ox+p.x*s+2,oy+p.y*s+2,s-4,s-4)}}
+["next","nextMobile"].forEach(id=>$(id).onclick=()=>change(1));["undo","undoMobile"].forEach(id=>$(id).onclick=()=>change(-1));
+$("runDone").onclick=runDone;$("rowDone").onclick=rowDone;
+$("jump").onclick=()=>{const r=safe($("jumpRow").value,1,H),s=safe($("jumpCell").value,1,W),idx=(r-1)*W+s-1;if(idx!==progress&&!confirm("Перейти к ряду "+r+", клетке "+s+"?"))return;move(idx)};
+$("zoom").oninput=e=>{zoom=Number(e.target.value);drawFull()};
+$("find").onclick=()=>{const q=loc(progress),w=$("chartWrap");w.scrollLeft=Math.max(0,36+q.x*zoom-w.clientWidth/2);w.scrollTop=Math.max(0,27+q.y*zoom-w.clientHeight/2)};
+$("chart").onclick=e=>{const rect=e.currentTarget.getBoundingClientRect(),x=Math.floor(((e.clientX-rect.left)*e.currentTarget.width/rect.width-36)/zoom),y=Math.floor(((e.clientY-rect.top)*e.currentTarget.height/rect.height-27)/zoom);if(x<0||x>=W||y<0||y>=H)return;const r=H-1-y,s=r%2?x:W-1-x,idx=r*W+s;if(idx!==progress&&!confirm("Перейти к ряду "+(r+1)+", клетке "+(s+1)+"?"))return;move(idx)};
+$("toggleMode").onclick=()=>{focused=!focused;document.body.classList.toggle("focus",focused);$("toggleMode").textContent=focused?"Показать всю схему":"Режим вязания"};
+$("download").onclick=()=>{const content=JSON.stringify({type:"meteli-progress",version:1,width:W,height:H,progress,date:new Date().toISOString()},null,2),blob=new Blob([content],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="meteli-progress.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),3000)};
+$("upload").onclick=()=>$("restoreFile").click();
+$("restoreFile").onchange=async e=>{try{const f=e.target.files[0];if(!f)return;const d=JSON.parse(await f.text());if(d.type!=="meteli-progress"||d.width!==W||d.height!==H||!Number.isInteger(d.progress)||d.progress<0||d.progress>N)throw Error("Неподходящий файл");if(confirm("Восстановить сохранённый прогресс?"))move(d.progress)}catch(ex){alert("Не удалось прочитать файл: "+ex.message)}e.target.value=""};
+$("reset").onclick=()=>{if(confirm("Стереть весь прогресс?"))move(0)};
+$("print").onclick=()=>window.print();
+$("wake").onclick=async()=>{if(!("wakeLock" in navigator)){alert("Safari может не поддерживать удержание экрана. Можно временно изменить автоблокировку в настройках iPhone.");return}try{if(lock){await lock.release();lock=null;$("wake").textContent="☀ Не гасить экран"}else{lock=await navigator.wakeLock.request("screen");$("wake").textContent="☀ Экран не гаснет";lock.addEventListener("release",()=>{$("wake").textContent="☀ Не гасить экран";lock=null})}}catch(err){alert("Не удалось удержать экран: "+err.message)}};
+document.addEventListener("keydown",e=>{if(e.target.matches("input"))return;if(e.key==="ArrowRight"||e.code==="Space"){e.preventDefault();change(1)}else if(e.key==="ArrowLeft"){e.preventDefault();change(-1)}});
+render(true);
+if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("./sw.js").catch(()=>{});
+})();
+</script>
+</body>
+</html>
