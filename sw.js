@@ -1,4 +1,4 @@
-const CACHE = "meteli-v3-matching-borders-2026-10-20";
+const CACHE = "meteli-v4-screenshot-chart-2026-10-20";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg"];
 self.addEventListener("install", event => {
   event.waitUntil(
