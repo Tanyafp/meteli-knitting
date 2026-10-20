@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Метели">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="description" content="Вязальный навигатор: точная схема 114 × 60 клеток с подсветкой и сохранением прогресса.">
+<meta name="description" content="Вязальный навигатор: точная схема 114 × 132 клеток с подсветкой и сохранением прогресса.">
 <title>Метели — вязальный навигатор</title>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="./icon.svg">
@@ -37,8 +37,8 @@ footer{font-size:11px;color:#83918b;text-align:center;padding-top:14px}
 <body>
 <main id="app">
 <header><div class="logo" aria-hidden="true">❄</div><div><div class="kicker">Мой навигатор вязания</div><h1>Метели</h1></div><div id="saved" class="save">● сохранено</div></header>
-<div class="hero"><h2>Не такие метели<br><b>в ебало летели</b></h2><p>Твоя филейная схема · 114 клеток × 60 рядов · 347 воздушных петель начальной цепочки по выбранному варианту сетки</p></div>
-<div style="font-size:12px;color:#3c6f67;background:#e8f2eb;padding:10px 14px;margin:0 0 12px;border-radius:12px;font-weight:700">❄ Вариант № 1 · одинаковая верхняя и нижняя кайма · первые 4 ряда и надпись сохранены</div>
+<div class="hero"><h2>Не такие метели<br><b>в ебало летели</b></h2><p>Твоя филейная схема · 114 клеток × 132 ряда · 347 воздушных петель начальной цепочки по выбранному варианту сетки</p></div>
+<div style="font-size:12px;color:#3c6f67;background:#e8f2eb;padding:10px 14px;margin:0 0 12px;border-radius:12px;font-weight:700">❄ Рисунок со скриншота перенесён в клеточную сетку · первые 4 ряда сохранены · теперь 132 ряда</div>
 <div class="metrics"><div class="metric"><strong id="rowStat">1 / 60</strong><small>ряд</small></div><div class="metric"><strong id="cellStat">1 / 114</strong><small>клетка в ряду</small></div><div class="metric"><strong id="percentStat">0%</strong><small>связано</small></div></div>
 <div class="track"><span id="bar"></span></div>
 <div class="layout">
@@ -53,7 +53,7 @@ footer{font-size:11px;color:#83918b;text-align:center;padding-top:14px}
 <div class="actions"><button id="undo" class="secondary">← Назад</button><button id="next" class="primary">✓ Клетка готова</button></div>
 <div class="twobuttons"><button id="runDone">✓ Весь одинаковый участок</button><button id="rowDone">✓ До конца ряда</button></div>
 <p class="muted" style="margin-top:9px">После последней клетки ряда приложение автоматически меняет направление следующего ряда.</p>
-<div class="jump"><label>Номер ряда<input id="jumpRow" type="number" min="1" max="60" value="1" inputmode="numeric"></label><label>Клетка<input id="jumpCell" type="number" min="1" max="114" value="1" inputmode="numeric"></label><button id="jump">Перейти</button></div>
+<div class="jump"><label>Номер ряда<input id="jumpRow" type="number" min="1" max="132" value="1" inputmode="numeric"></label><label>Клетка<input id="jumpCell" type="number" min="1" max="114" value="1" inputmode="numeric"></label><button id="jump">Перейти</button></div>
 </section>
 <section class="card"><div class="cardhead"><h3>Участки текущего ряда</h3></div><p class="muted">Нажми на нужный участок, чтобы перейти к нему.</p><div id="runs" class="runlist"></div></section>
 </div>
@@ -68,13 +68,13 @@ footer{font-size:11px;color:#83918b;text-align:center;padding-top:14px}
 <details><summary>Как читать филейную сетку</summary><p>□ Пустая клетка — 2 воздушные петли и столбик с накидом. ■ Заполненная клетка — три столбика с накидом. Общие столбики между клетками учитываются при вязании, поэтому сначала проверь плотность и образец. Начинай снизу справа. Нечётные ряды идут справа налево, чётные — слева направо.</p></details>
 <div class="tip">📱 <b>Установка на iPhone:</b> открой эту ссылку в Safari, нажми «Поделиться» → «На экран Домой» → «Добавить». Начинай отмечать клетки в установленном приложении. Прогресс сохраняется на этом устройстве, но не синхронизируется с другими телефонами. Для надёжности время от времени нажимай «Сохранить прогресс в файл».</div>
 </section>
-<footer>114 × 60 = 6 840 клеток · без регистрации · работает офлайн после первой загрузки</footer>
+<footer>114 × 60 = 15 048 клеток · без регистрации · работает офлайн после первой загрузки</footer>
 </main>
 <div class="fixed"><button id="undoMobile" aria-label="Предыдущая клетка">←</button><button id="nextMobile">✓ Клетка готова</button></div>
 <script>
 (function(){
 "use strict";
-const W=114,H=60,N=W*H,B64="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATnOc5znOc5znOc5zmAAACACACACACACACACAAAgFCFCFCFCFCFCFCFBAFQCACACACACACACACCoCIQQQQQQQQQQQQQQQEQBUAD/tX/Akgf9W/4AKgEggGA49FwfB0XjgMAhIABQLwtygcfHAp2h6BQAAiISZHMQH/8BGcTJCJAFVQQQpSgAfAApShBBaoCIgawThAMfGAQ5BrAkQBQAfgF2w4kjht0A/ACgEgAoACZHAVAcTIACgBIAkEBARX5AaED9QEBAJABQqCgoqCg5KCgoKChCgGIEBAQEBAaEBAQEBAEYBQAAAAAAAAAAAAAAADgAkIvg+cii+CL7746IJAFQIoAIikmgDaAiBKYCoCIIoAIioqgCqAiBKoEQBQPvAI+wq8CrwjyKoCgEkIoAIioygCKAiCLIJIAQIoAIikigCKAiCKIBAAAIvgIiii+CL4j6KIAAEgAAAAAAAAAAAAAAABIBUAAAAAAAEAAAAAAAKgCIEBAQEBA6kBAQEBAEQFwqCgoKCh5aCgoKChDoBwEBAQEBA6kBAQEBADgCMAAAAAAAEAAAAAAAMQFQAAAAAAAAAAAAAAADoAgB4H3zhzgHfffHRABABQBEEEESUQJQEQJTACgGMBEEEESUQJQEQJVAMYBQB4Hnn0UQReEeRVACgAgBEEEUUUQRQEQRZABAEQBEEEUUUQRQEQRRABIAEB4H3kUTgRfEfRRAIAAgAAAAAAAAAAAAAAABAFQEBIQkDAaEJAwGBECoCIqCgpaCg5KCh4KChEQBUEBISMVAfEFCYGBAKgEgAD/tX/Akgf9W/4ABIAAgGA49FwfB0XjgMAgAAhQLwtygcfHAp2h6BRAFWISZHMQH/8BGcTJCKoCJQQQpSgAfAApShBBUQBQgawThAMfGAQ5BrAigEgAfgF2w4kjht0A/ABICIQQQQQQQQQQQQQQQEQFQCACACACACACACACCoAgFCFCFCFCFCFCFCFBAAACACACACACACACACAAATnOc5znOc5znOc5zmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const W=114,H=132,N=W*H,B64="AAAAAAAAAAAAAAAAAAAABxgwxwwwww4wwwzjYACGhsUAmw2wWAGACAcGEHmEMPEPGPGPGPGHGaGONwOAbAbgfgdgdgNgHAbMwaAbgZgZgZgdgNgFg7FmMGPGPGPGPGPCHGDGODGAGGAGAGAGAGACAAGEABxgxxwwxw4www44c4AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAEHhhgAAAAAGAAAAAAYYOFjngAQABAPAAAAgAeMLIyPAA8ADgfgMABwAPGxFmPAA4IHgvQeBBwAPiKCHOAAQIBA2wMBAgAHmEIzINgAeAA5wADgALBsRFhwdgAeAAfgAHgAfg4KCAYYYDIPmPGLBMBxhgECAGzYB4PnGOfB4AsXAEFgDnwATHrmdeMwAecAKKwPmwMXHr2d+OxAWfAVFgO7AMOAY2xwHDAO3gKDA8dAeMB4+x8DHgNjwECB4PAMIB+fnABBAPB4EaxwDgA4HHPOOB4AcA41dxgAwDcHjPMeDMA4AY7Nx0AMGCDxvYcEGDgDYbFgaADsZZ42x5oxMAHwKCAMCBsY8dfvxwxYCDAECAEHAd5/////55gOAAEIwAHAcx/////8xgPAARNwA2wMA+PPvjwBA2wAbFAA2wGAZ4+x5gGA+wAKCBmWkDABw3Q8AMCemYECADPMBwHjPMeA4DPMIEFABncAMHHPOODgBnYAKCAIvRADAGPnAOAI/RgEHAcfjg5j4ex8ZwcfjgENg///x4gY+xgZ4/9/wbawcfjj4zr2d8x8Mfhg1FgBmYDQ3rmd+w0B2YALCADPMDBnnGOfYMDPMAEAACekBhPmPGbMICemAACAA+wA2AAfgAGwA+wAEHAQ2wD8AA6wAD+A2wwODgoGAPgMAvQBAfAGB4cBgQPAfAeAfgGgPgPAgYG4AGAeAMAPABADgGAA2HfAAAAAAAGAAAAAAAGuDdgAAAAAAGAAAAAAAZsZYwAEAAAAAAAAAAAAwpcg4AGAAAAGAAAADABwTdDJmfM5mbPtmYzPmZuLOHZmfO5mbftmYzP2duHEDwAOAAAAPAAAAHAAeCNgAAEAAAAGAAAACAAIZJgAAAAAAAAAAAAAAAAJLwIvg+cii+CL7746IA9PwIoAIikmgDaAiBKYA9FgIoAIioqgCqAiBKowaGAPvAI+wq8CrwjyKowGBgIoAIioygCKAiCLIwIBgIoAIikigCKAiCKIwIDgIvgIiii+CL4j6KIwUHQMUAMR7I8ARQGYI8wuNgMX4MR4o/wRfmfo8wbHAAAAAAAAAAAAAAAAAeDABAACAAEAAACAAABBMAeBAYCAwEGAYCAgMBDgA+FQCKAAUPACCiABBHwO/NRaKy0V/t6Kis9Nf3PeBAACAAEPAACAAABDnLIB4H3zhzgHfffHRABNLABEEEESUQJQEQJTAANDABEEEESUQJQEQJVAAEGAB4Hnn0UQReEeRVAAGPABEEEUUUQRQEQRZAAPNgBEEEUUUQRQEQRRAAbPwB4H3kUTgRfEfRRAA/LwDEGCPFHmGKAzBHmA9EwD8H77FG+GL4z9HmAyCAD4H7xFEcCL4h9FiAEEAAAAAAAAAAAAAAAAACMBgAEAAAAGAAAADAAMDLGwAKAAAAPAAAAHgA2NLnZmVO5nbftmdzL2dmNNDYAKAAAAPAAAAHgBkLGAwAEAAAAGAAAADAAwCCBgAAAAAAAAAAAAAAIEBjAAAAAAAGAAAAAAAOYC+GAgPAMAGABAfgQCD0OMPD4cwcAPACgTg8HBnecGBwYQMA/QBAhg4CDnc2AMmASAQ+wwEgGTACbDzAGuAWA8fjwGgDXAMcHhwysw2AcPLgHwZWwYeHAw57g5gdGJgbwc5wwOGAYdzBjwHGOA8YMxhgGAAbD8bBgB2YAYNh8NgACAf//+Bg5/5wAD///gEFB3//8MAcfhgDD//+4KKjjL6YeBmPGYHwk9McVNDgdzAxH/+/+IYM5gMKHDAx5zghmPmYYMY4wMOCDAmsjIgc/xgZMTWQMEFBsOuDNA5+5wLMHXDIKNh8EmPHAZ2YjGPCTB4bNw4BwPgcHGODgPA4BwbIAfB4Bw8dPJhw4A8HgRCAPggf48dfrhx/gQfAEHAnggcOQ8+zwnDwQeQOPhwAA8HQw2wwuDwAA4fPhwIA4B8AvQB4AwAA4fHAgcAwQHAPAGQgwBwQOCAAcAAoBgGAYBQABwAEEwAIAAQAwAAwAwAAAA2MwAAAAAAAAAAAAAAAAzYAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAhgwwgwwwwQwQwRBIAABxgwxwwwwwwwwwzj4ACGAMOEPEPGPCHCHGcGEFmMEPALEPGNCNAHEDCKIwaAbgRgZgYgYgdgFgRFgMEPELEPGPGNCHGDCKDGAOGAGAOAGAGAGAAGEATnOc5znOc5znOc5zmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const bytes=Uint8Array.from(atob(B64),c=>c.charCodeAt(0));
 const bit=(x,y)=>{const n=y*W+x;return (bytes[n>>3]>>(7-(n&7)))&1;};
 const $=id=>document.getElementById(id);
@@ -91,13 +91,13 @@ function change(d){move(progress+d)}
 function runDone(){const run=currentRun();if(run)move(loc(progress).r*W+run.end)}
 function rowDone(){if(progress===N)return;const left=W-(progress%W);if(left>12&&!confirm("Отметить оставшиеся "+left+" клеток этого ряда?"))return;move((Math.floor(progress/W)+1)*W)}
 function render(scroll=false){
- const end=progress>=N,p=loc(progress),r=end?60:p.r+1,s=end?114:p.s+1,run=currentRun();
+ const end=progress>=N,p=loc(progress),r=end?H:p.r+1,s=end?114:p.s+1,run=currentRun();
  $("rowStat").textContent=r+" / 60";$("cellStat").textContent=s+" / 114";$("percentStat").textContent=Math.floor(progress*100/N)+"%";$("bar").style.width=(100*progress/N)+"%";
  $("direction").textContent=end?"✓ закончено":p.r%2?"→ слева направо":"← справа налево";$("direction").className="pill"+(p.r%2?" alt":"");
  $("current").className="current"+(run&&run.v?" dark":"");
  $("position").textContent=end?"ВСЕ РЯДЫ ГОТОВЫ":"РЯД "+r+" · КЛЕТКА "+s+" ИЗ 114";
  $("cellName").textContent=end?"ПАННО ГОТОВО ❄":run.v?"ЗАПОЛНЕННАЯ ■":"ПУСТАЯ □";
- $("how").textContent=end?"Все 6 840 клеток отмечены!":run.v?"3 столбика с накидом":"2 воздушные петли + 1 столбик с накидом";
+ $("how").textContent=end?"Все 15 048 клеток отмечены!":run.v?"3 столбика с накидом":"2 воздушные петли + 1 столбик с накидом";
  $("sequence").textContent=end?"Сделай резервную копию результата":run.remaining+" "+(run.v?"заполненных":"пустых")+" клеток подряд, включая текущую";
  $("jumpRow").value=r;$("jumpCell").value=s;
  ["next","nextMobile","runDone","rowDone"].forEach(id=>$(id).disabled=end);
@@ -119,7 +119,7 @@ $("chart").onclick=e=>{const rect=e.currentTarget.getBoundingClientRect(),x=Math
 $("toggleMode").onclick=()=>{focused=!focused;document.body.classList.toggle("focus",focused);$("toggleMode").textContent=focused?"Показать всю схему":"Режим вязания"};
 $("download").onclick=()=>{const content=JSON.stringify({type:"meteli-progress",version:1,width:W,height:H,progress,date:new Date().toISOString()},null,2),blob=new Blob([content],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="meteli-progress.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),3000)};
 $("upload").onclick=()=>$("restoreFile").click();
-$("restoreFile").onchange=async e=>{try{const f=e.target.files[0];if(!f)return;const d=JSON.parse(await f.text());if(d.type!=="meteli-progress"||d.width!==W||d.height!==H||!Number.isInteger(d.progress)||d.progress<0||d.progress>N)throw Error("Неподходящий файл");if(confirm("Восстановить сохранённый прогресс?"))move(d.progress)}catch(ex){alert("Не удалось прочитать файл: "+ex.message)}e.target.value=""};
+$("restoreFile").onchange=async e=>{try{const f=e.target.files[0];if(!f)return;const d=JSON.parse(await f.text());if(d.type!=="meteli-progress"||d.width!==W||(d.height!==H&&d.height!==60)||!Number.isInteger(d.progress)||d.progress<0||d.progress>N)throw Error("Неподходящий файл");if(confirm("Восстановить сохранённый прогресс?"))move(d.progress)}catch(ex){alert("Не удалось прочитать файл: "+ex.message)}e.target.value=""};
 $("reset").onclick=()=>{if(confirm("Стереть весь прогресс?"))move(0)};
 $("print").onclick=()=>window.print();
 $("wake").onclick=async()=>{if(!("wakeLock" in navigator)){alert("Safari может не поддерживать удержание экрана. Можно временно изменить автоблокировку в настройках iPhone.");return}try{if(lock){await lock.release();lock=null;$("wake").textContent="☀ Не гасить экран"}else{lock=await navigator.wakeLock.request("screen");$("wake").textContent="☀ Экран не гаснет";lock.addEventListener("release",()=>{$("wake").textContent="☀ Не гасить экран";lock=null})}}catch(err){alert("Не удалось удержать экран: "+err.message)}};
