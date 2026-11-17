@@ -32,11 +32,14 @@ details{border:1px solid #dce3db;border-radius:12px;margin-top:13px;padding:10px
 footer{font-size:11px;color:#83918b;text-align:center;padding-top:14px}
 @media(max-width:780px){#app{padding:12px 11px 118px}.layout{grid-template-columns:1fr}.hero{padding:16px}.hero h2{font-size:23px}.card{padding:14px}.metrics{gap:7px}.metric{padding:9px}.metric strong{font-size:22px}.metric small{font-size:10px}.current{padding:15px}.current .value{font-size:24px}.fixed{position:fixed;z-index:15;bottom:0;left:0;right:0;display:flex;gap:9px;padding:9px 12px calc(9px + env(safe-area-inset-bottom));background:#fffefaf5;border-top:1px solid #ceddd2;backdrop-filter:blur(12px)}.fixed button{height:54px;border:0;border-radius:12px;font-size:16px;font-weight:850}.fixed #undoMobile{width:66px;background:#e6eee6;color:#29575a}.fixed #nextMobile{flex:1;background:#2c716d;color:white}.actions{display:none}header h1{font-size:25px}.pill{font-size:10px}#strip{gap:2px}}
 @media print{header .save,.actions,.fixed,.tools,.jump,.hero,.secondarypanel .tools,.tip{display:none!important}#app{padding:0}.layout{display:block}.canvaswrap{max-height:none;overflow:visible}#chart{max-width:100%;height:auto}body{background:white}}
+
+.pattern-nav{display:flex;gap:8px;margin:0 0 13px;flex-wrap:wrap}.pattern-nav a{display:inline-flex;align-items:center;gap:6px;min-height:42px;padding:10px 14px;border-radius:12px;background:#fffefa;color:#275954;text-decoration:none;font-size:13px;font-weight:800;border:1px solid #ccdbd0}.pattern-nav a.active{background:#163a40;color:white;border-color:#163a40}.pattern-nav a:focus-visible{outline:3px solid #d48d69;outline-offset:3px}
 </style>
 </head>
 <body>
 <main id="app">
 <header><div class="logo" aria-hidden="true">❄</div><div><div class="kicker">Мой навигатор вязания</div><h1>Метели</h1></div><div id="saved" class="save">● сохранено</div></header>
+<nav class="pattern-nav" aria-label="Выбор схемы"><a class="active" aria-current="page" href="./">❄ Метели</a><a href="./pokoy.html">✦ В душе покой</a></nav>
 <div class="hero"><h2>Не такие метели<br><b>в ебало летели</b></h2><p>Твоя филейная схема · 114 клеток × 132 ряда · 347 воздушных петель начальной цепочки по выбранному варианту сетки</p></div>
 <div style="font-size:12px;color:#3c6f67;background:#e8f2eb;padding:10px 14px;margin:0 0 12px;border-radius:12px;font-weight:700">✓ Исправлены буквы и разделители: всё по ровной сетке · первые 4 ряда сохранены</div>
 <div class="metrics"><div class="metric"><strong id="rowStat">1 / 132</strong><small>ряд</small></div><div class="metric"><strong id="cellStat">1 / 114</strong><small>клетка в ряду</small></div><div class="metric"><strong id="percentStat">0%</strong><small>связано</small></div></div>
