@@ -1,4 +1,4 @@
-const CACHE = "meteli-v8-resizable-canvas-2026-11-17";
+const CACHE = "meteli-v9-movable-text-2026-11-17";
 const ASSETS = ["./", "./index.html", "./pokoy.html", "./editor.html", "./manifest.webmanifest", "./icon.svg", "./scheme.svg"];
 self.addEventListener("install", event => {
   event.waitUntil(
