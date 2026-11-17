@@ -1,4 +1,4 @@
-const CACHE = "meteli-v9-movable-text-2026-11-17";
+const CACHE = "meteli-v10-move-button-visible-2026-11-17";
 const ASSETS = ["./", "./index.html", "./pokoy.html", "./editor.html", "./manifest.webmanifest", "./icon.svg", "./scheme.svg"];
 self.addEventListener("install", event => {
   event.waitUntil(
@@ -17,7 +17,7 @@ self.addEventListener("fetch", event => {
   if (req.method !== "GET" || new URL(req.url).origin !== self.location.origin) return;
   if (req.mode === "navigate" || req.destination === "document") {
     event.respondWith(
-      fetch(req).then(async response => {
+      fetch(req, {cache: "no-store"}).then(async response => {
         if (response.ok) {
           const cache = await caches.open(CACHE);
           await cache.put(req, response.clone());
