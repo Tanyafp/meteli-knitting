@@ -1,5 +1,5 @@
-const CACHE = "meteli-v5-aligned-text-2026-10-20";
-const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg", "./scheme.svg"];
+const CACHE = "meteli-v6-two-patterns-2026-11-17";
+const ASSETS = ["./", "./index.html", "./pokoy.html", "./manifest.webmanifest", "./icon.svg", "./scheme.svg"];
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting())
