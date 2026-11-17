@@ -47,7 +47,7 @@ select{width:100%}.buttons{display:flex;flex-wrap:wrap;gap:7px}
 .tip{font-size:12px;line-height:1.55;color:#67817a;margin:12px 0 0}
 .figure-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:11px;flex-wrap:wrap}
 .figure-head strong{font-size:16px}.meta{color:#64827b;font-size:12px;font-weight:700}
-#canvasScroll{width:100%;height:min(64vh,650px);min-height:290px;overflow:auto;overscroll-behavior:contain;background:#fff;border:1px solid #d4e1d9;border-radius:11px;position:relative}
+.quickmove{display:flex;gap:12px;align-items:center;justify-content:space-between;background:#e6f1eb;border:1px solid #c3dbcf;border-radius:15px;padding:14px 17px;margin-bottom:13px}.quickmove strong{font-size:16px}.quickmove p{font-size:12px;color:#58776b;margin:4px 0 0}.quickmove .btn{min-width:180px;min-height:48px}.figure-head .btn{padding:8px 11px;min-height:37px}@media(max-width:600px){.quickmove{flex-wrap:wrap}.quickmove .btn{width:100%}}#canvasScroll{width:100%;height:min(64vh,650px);min-height:290px;overflow:auto;overscroll-behavior:contain;background:#fff;border:1px solid #d4e1d9;border-radius:11px;position:relative}
 #gridCanvas{display:block;max-width:none;image-rendering:pixelated}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
 .stat{border:1px solid #d9e2da;border-radius:12px;padding:11px;background:#f8faf6}
@@ -80,9 +80,9 @@ dialog h3{font:normal 23px Georgia,serif;margin:0 0 11px}
 <main id="app">
 <header><div class="logo">✎</div><div><div class="kicker">Моя мастерская вязания</div><h1>Рисовалка</h1></div><div id="statusSave">✓ сохранено</div></header>
 <nav class="pattern-nav" aria-label="Выбор схемы">
-<a href="./">❄ Метели</a><a href="./pokoy.html">✦ В душе покой</a><a href="./editor.html" class="active" aria-current="page">✎ Рисовалка</a>
+<a href="./">❄ Метели</a><a href="./pokoy.html">✦ В душе покой</a><a href="./editor.html?v=10" class="active" aria-current="page">✎ Рисовалка</a>
 </nav>
-<div class="hero"><h2>Здесь рисуешь <em>ты сама</em> ✨</h2><p>Закрашивай и стирай клетки мышкой или пальцем. Можешь начать с пустой сетки или изменить копию «В душе покой». Все твои рисунки остаются отдельными от готовых схем.</p></div>
+<div class="hero"><h2>Здесь рисуешь <em>ты сама</em> ✨</h2><p>Закрашивай и стирай клетки мышкой или пальцем. Можешь начать с пустой сетки или изменить копию «В душе покой». Все твои рисунки остаются отдельными от готовых схем.</p></div><div class="quickmove"><div><strong>Нужно передвинуть надпись?</strong><p>Теперь инструмент легко найти — прямо здесь.</p></div><button class="btn primary" id="moveQuick" type="button">↔ Перенести буквы</button></div>
 <section class="card">
 <div class="sectionlabel">Мои рисунки</div>
 <div class="project-row">
@@ -118,7 +118,7 @@ dialog h3{font:normal 23px Georgia,serif;margin:0 0 11px}
 <div class="zoomline"><label for="zoom">Масштаб сетки</label><input id="zoom" type="range" min="7" max="26" step="1" value="12"><span id="zoomValue">12 px</span><span id="sizeLabel">108 × 42 клетки</span></div>
 </section>
 <section class="card">
-<div class="figure-head"><strong id="drawingName">Мой рисунок</strong><span class="meta" id="cellHint">Коснись клетки</span></div>
+<div class="figure-head"><strong id="drawingName">Мой рисунок</strong><span class="meta" id="cellHint">Коснись клетки</span><button class="btn primary" id="moveCanvas" type="button">↔ Перенести</button></div>
 <div id="canvasScroll"><canvas id="gridCanvas" role="img" aria-label="Редактируемая филейная схема в клеточку"></canvas></div>
 <p class="tip">■ = 3 столбика с накидом. □ = 2 воздушные петли + 1 столбик с накидом. Размер полотна зависит от плотности вязания: сначала свяжи образец.</p>
 </section>
@@ -243,6 +243,9 @@ $("resizeForm").onsubmit=e=>{e.preventDefault();const w=Number($("resizeW").valu
 $("deleteProject").onclick=()=>{const p=current();if(!confirm("Точно удалить рисунок «"+p.name+"» и весь его прогресс? Сначала можно скачать файл."))return;projects=projects.filter(x=>x.id!==p.id);if(!projects.length)projects.push(blank("Моя схема",80,45));activeId=projects[0].id;undoStack=[];redoStack=[];persist();selector();schedule();showKnit();updateUndo()};
 $("clearAll").onclick=()=>{if(!confirm("Очистить ВСЕ клетки этого рисунка? Кнопка «Отменить» позволит вернуть узор."))return;clearSelection();const p=current(),before=p.bits.slice();p.bits.fill(0);history(before);schedule();alertToast("Сетка очищена")};
 for(const [id,value] of [["toolPaint","paint"],["toolErase","erase"],["toolMove","move"],["toolFill","fill"],["toolPan","pan"]])$(id).onclick=()=>setTool(value);
+function activateMove(){setMode("draw");setTool("move");$("gridCanvas").scrollIntoView({behavior:"smooth",block:"center"});alertToast("Обведи текст рамкой, затем перетащи. Или воспользуйся стрелками.")}
+$("moveQuick").onclick=activateMove;
+$("moveCanvas").onclick=activateMove;
 $("clearSelection").onclick=clearSelection;
 for(const [id,dx,dy] of [["nudgeLeft",-1,0],["nudgeRight",1,0],["nudgeUp",0,-1],["nudgeDown",0,1]])$(id).onclick=()=>{if(selection)performMove(selection.x+dx,selection.y+dy)};
 $("tabDraw").onclick=()=>setMode("draw");$("tabKnit").onclick=()=>setMode("knit");
@@ -269,7 +272,7 @@ $("importJSON").onclick=()=>$("importFile").click();
 $("importFile").onchange=async e=>{try{const f=e.target.files[0];if(!f)return;const d=JSON.parse(await f.text());if(!validImport(d))throw Error("Файл должен быть рисунком из «Рисовалки»");if(projects.length>=MAX_PROJECTS)throw Error("Максимум 35 рисунков");const p=blank((d.name||"Загруженная схема").slice(0,60),d.w,d.h);p.bits=Uint8Array.from(d.bitmap,c=>c==="1"?1:0);p.progress=clamp(d.progress,0,d.w*d.h);projects.push(p);switchProject(p.id);alertToast("Рисунок загружен")}catch(err){alert("Не удалось загрузить: "+err.message)}e.target.value=""};
 $("exportPNG").onclick=imagePNG;$("printPage").onclick=()=>window.print();
 document.addEventListener("keydown",e=>{if(e.target.matches("input,select,textarea"))return;if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="z"){e.preventDefault();if(e.shiftKey)doRedo();else doUndo()}else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="y"){e.preventDefault();doRedo()}else if(mode==="draw"&&tool==="move"&&selection&&["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(e.key)){e.preventDefault();const shift={"ArrowLeft":[-1,0],"ArrowRight":[1,0],"ArrowUp":[0,-1],"ArrowDown":[0,1]}[e.key];performMove(selection.x+shift[0],selection.y+shift[1])}else if(mode==="knit"&&(e.key==="ArrowRight"||e.code==="Space")){e.preventDefault();moveProgress(current().progress+1)}else if(mode==="knit"&&e.key==="ArrowLeft"){e.preventDefault();moveProgress(current().progress-1)}});
-load();selector();updateUndo();setTool("paint");showKnit();persist();schedule();
+load();selector();updateUndo();setTool(new URLSearchParams(location.search).get("tool")==="move"?"move":"paint");showKnit();persist();schedule();
 if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("./sw.js").catch(()=>{});
 })();
 </script>
