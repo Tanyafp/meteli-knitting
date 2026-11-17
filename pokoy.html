@@ -40,7 +40,7 @@ footer{font-size:11px;color:#83918b;text-align:center;padding-top:14px}
 <main id="app">
 <header><div class="logo" aria-hidden="true">❄</div><div><div class="kicker">Мой навигатор вязания</div><h1>Метели</h1></div><div id="saved" class="save">● сохранено</div></header>
 <nav class="pattern-nav" aria-label="Выбор схемы"><a href="./">❄ Метели</a><a class="active" aria-current="page" href="./pokoy.html">✦ В душе покой</a></nav>
-<div class="hero"><h2>В душе покой<br><b>Вокруг пиздец</b></h2><p>Компактная филейная схема · 108 клеток × 42 ряда · боковые звёзды, узорная кайма и две строки текста</p></div>
+<div class="hero"><h2>В душе покой<br><b>Вокруг пиздец</b></h2><p>Компактная филейная схема · 108 клеток × 42 ряда · боковые звёзды, узорная кайма и буквы с засечками</p></div>
 <div style="font-size:12px;color:#3c6f67;background:#e8f2eb;padding:10px 14px;margin:0 0 12px;border-radius:12px;font-weight:700">✦ Это отдельный проект. Прогресс «Метелей» остаётся на месте, а здесь сохраняется независимо.</div>
 <div class="metrics"><div class="metric"><strong id="rowStat">1 / 42</strong><small>ряд</small></div><div class="metric"><strong id="cellStat">1 / 108</strong><small>клетка в ряду</small></div><div class="metric"><strong id="percentStat">0%</strong><small>связано</small></div></div>
 <div class="track"><span id="bar"></span></div>
@@ -78,7 +78,7 @@ footer{font-size:11px;color:#83918b;text-align:center;padding-top:14px}
 <script>
 (function(){
 "use strict";
-const W=108,H=42,N=W*H,B64="AAAAAAAAAAAAAAAAAADMzMzMzMzMzMzMzMzMAAAAAAAAAAAAAAAAAAP////////////////8IAAAAAAAAAAAAAAAAELbbbbbbbbbbbbbbbbUIAAAAQAAAgAABAAAAEKAAAAQAAAgAABAAAAUKAAAB8AAD4AAHwAAAUIAAAAAAAAAAAAAAAAEKAAAAAAAAAAAAAAAAUKAAAAAAAAAAAAAAAAUIAA8Aciq+A+cicUAAEKDgiAUiqgAiikiIBwUKBAiAUiqgAiioiiAgUIRE8AUeq8AiiwimIiEKJIiAUCqgAiioiqEkUKFQiA+iqgAiikiyCoUJX18Aic++Aicicir6kL//AAAAAAAAAAAA//0LX1AAAAAAAAAAAAr60IFQAAAAAAAAAAAACoEKJIAAAAAAAAAAAAEkUKRHjkXkXwH0Tjn0oiUIBEUUkUUAEUUSkEggEKDkUVEUUAEUwSkEhwUKAHkWHj0AEVRinkgAUIAEUVEAUAEWQSkEgAEKAEUUkEUAEUUX0HwAUKAHjkUDkAEUTkXwQAUIAAAAAAAAAAAAAAAAEKAAAAAAAAAAAAAAAAULbbbbbbbbbbbbbbbbUIAAAAAAAAAAAAAAAAEP////////////////8EAYAwBgDAGAMAYAwBACAkBICQEgJASAkBICABjDGGMMYYwxhjDGGMAAUAoBQCgFAKAUAoBQAAIAQAgBACAEAIAQAgAAIAQAgBACAEAIAQAgAAAAAAAAAAAAAAAAAAA";
+const W=108,H=42,N=W*H,B64="AAAAAAAAAAAAAAAAAADMzMzMzMzMzMzMzMzMAAAAAAAAAAAAAAAAAAP////////////////8IAAAAAAAAAAAAAAAAELbbbbbbbbbbbbbbbbUIAAAAQAAAgAABAAAAEKAAAAQAAAgAABAAAAUKAAAB8AAD4AAHwAAAUIAAAAAAAAAAAAAAAAEKAAAAAAAAAAAAAAAAUKAAHAObfeD5zZxQAAUIAAEgGRVQCKKSIgAAEKDgEQKRVQCKKiKIBwUKBAHgKKVcCKLCKYAgUIREEQKEVQCKLCKoIiEKJIEQKEVQCKKiKoEkUKFQEgfEVQCKKSLICoUJX1HgREfQCKKKKIL6kL//HAROfeDZzZzYP/0LX1AAAAAAAAAAAAr60IFQAAAAAAAAAAAACoEKJI4c2828H23HPWEkUKRHkikiigEUQjISIiUIBEiioiigEUwlISAgEKDk8iwiUgEVQlOSBwUKAHiiw8IgEVTFISAAUIAEiiogIgEVQlISAAEKAEkikgIgEWQvoSAAUKAH8iigIgEUQooeAAUIAA4c24cwG23IvCAAEKAAAAAAAAAAAAAAAAULbbbbbbbbbbbbbbbbUIAAAAAAAAAAAAAAAAEP////////////////8EAYAwBgDAGAMAYAwBACAkBICQEgJASAkBICABjDGGMMYYwxhjDGGMAAUAoBQCgFAKAUAoBQAAIAQAgBACAEAIAQAgAAIAQAgBACAEAIAQAgAAAAAAAAAAAAAAAAAAA";
 const bytes=Uint8Array.from(atob(B64),c=>c.charCodeAt(0));
 const bit=(x,y)=>{const n=y*W+x;return (bytes[n>>3]>>(7-(n&7)))&1;};
 const $=id=>document.getElementById(id);
