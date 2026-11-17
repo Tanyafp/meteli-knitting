@@ -96,12 +96,12 @@ dialog h3{font:normal 23px Georgia,serif;margin:0 0 11px}
 <div class="sectionlabel">Инструменты</div>
 <div class="toolbar" role="group" aria-label="Рисование по клеточкам">
 <button class="btn selected" id="toolPaint" aria-pressed="true">■ Карандаш</button>
-<button class="btn" id="toolErase" aria-pressed="false">□ Ластик</button>
+<button class="btn" id="toolErase" aria-pressed="false">□ Ластик</button><button class="btn" id="toolMove" aria-pressed="false">↔ Перенести</button>
 <button class="btn" id="toolFill" aria-pressed="false">▣ Заливка</button>
 <button class="btn" id="toolPan" aria-pressed="false">✋ Рука</button>
 <button class="btn" id="undo" title="Отменить изменение">↶ Отменить</button>
 <button class="btn" id="redo" title="Вернуть изменение">↷ Вернуть</button>
-<button class="btn" id="addText">Текст с засечками</button>
+<button class="btn" id="addText">Текст с засечками</button><button class="btn" id="clearSelection" disabled>Снять выделение</button>
 <button class="btn warn" id="clearAll">Очистить</button>
 </div>
 <p class="tip" id="drawHint">Карандаш: проведи по клеткам, чтобы закрасить их. «Рука» позволяет прокручивать большую схему пальцем.</p>
@@ -126,7 +126,7 @@ dialog h3{font:normal 23px Georgia,serif;margin:0 0 11px}
 <div class="sectionlabel">Сохранить и поделиться</div>
 <div class="buttons"><button class="btn primary" id="exportJSON">↓ Скачать рисунок</button><button class="btn" id="importJSON">↑ Загрузить рисунок</button><button class="btn" id="exportPNG">↓ Картинка PNG</button><button class="btn" id="printPage">Печать</button></div>
 <input type="file" id="importFile" accept=".json,application/json" hidden>
-<div class="help"><details><summary>Что сохраняется?</summary>Рисунки и прогресс вязания автоматически сохраняются в этом браузере, отдельно для каждого узора. С другого телефона они сами не появятся. Для резервной копии нажми «Скачать рисунок» — файл можно потом загрузить обратно.</details><details><summary>Как пользоваться рисовалкой?</summary>Создай новую схему с нужными размерами или возьми копию «В душе покой». Размер существующего полотна меняется кнопкой «Размер полотна»: рисунок можно оставить по центру или закрепить у верхнего левого угла. Выбери карандаш и закрашивай клетки. Ластиком стирай, заливкой заполняй замкнутую область. Текст с засечками можно вставить в один из рядов. Кнопка «Вязать» запускает пошаговый счётчик по твоему рисунку.</details></div>
+<div class="help"><details><summary>Что сохраняется?</summary>Рисунки и прогресс вязания автоматически сохраняются в этом браузере, отдельно для каждого узора. С другого телефона они сами не появятся. Для резервной копии нажми «Скачать рисунок» — файл можно потом загрузить обратно.</details><details><summary>Как пользоваться рисовалкой?</summary>Создай новую схему с нужными размерами или возьми копию «В душе покой». Размер существующего полотна меняется кнопкой «Размер полотна»: рисунок можно оставить по центру или закрепить у верхнего левого угла. Выбери карандаш и закрашивай клетки. Ластиком стирай, заливкой заполняй замкнутую область. Текст с засечками можно вставить и передвинуть. Для старого текста выбери «Перенести», обведи надпись и перетащи её. Кнопка «Вязать» запускает пошаговый счётчик по твоему рисунку.</details></div>
 </section>
 <footer>«Метели» · свой рисунок, своя сетка, свой прогресс · без регистрации</footer>
 </main>
@@ -141,7 +141,7 @@ dialog h3{font:normal 23px Georgia,serif;margin:0 0 11px}
 <p class="tip">При уменьшении крайние клетки могут обрезаться. Изменение размера можно отменить кнопкой «↶ Отменить».</p>
 <div class="dialog-buttons"><button class="btn" type="button" id="cancelResize">Отмена</button><button class="btn primary" type="submit">Изменить размер</button></div>
 </form></dialog>
-<dialog id="textDialog"><form method="dialog" id="textForm"><h3>Надпись по клеточкам</h3><div class="dialog-fields"><label>Текст<input type="text" id="textValue" maxlength="80" value="В ДУШЕ ПОКОЙ" required></label><label>Шрифт<select id="textFont"><option value="serif">С засечками (классический)</option><option value="sans">Без засечек</option></select></label><label>Высота букв в клетках<input type="number" id="textSize" min="8" max="32" value="15"></label><label>Отступ сверху, рядов<input type="number" id="textY" min="0" value="9"></label></div><p class="tip">Надпись появится по центру. Если не помещается по ширине, буквы автоматически станут чуть меньше. Результат можно поправить карандашом.</p><div class="dialog-buttons"><button class="btn" type="button" id="cancelText">Отмена</button><button class="btn primary" type="submit">Добавить</button></div></form></dialog>
+<dialog id="textDialog"><form method="dialog" id="textForm"><h3>Надпись по клеточкам</h3><div class="dialog-fields"><label>Текст<input type="text" id="textValue" maxlength="80" value="В ДУШЕ ПОКОЙ" required></label><label>Шрифт<select id="textFont"><option value="serif">С засечками (классический)</option><option value="sans">Без засечек</option></select></label><label>Высота букв в клетках<input type="number" id="textSize" min="8" max="32" value="15"></label><label>Отступ сверху, рядов<input type="number" id="textY" min="0" value="9"></label></div><p class="tip">Надпись появится по центру и сразу выделится. Перетащи её мышкой или пальцем в нужное место. Позже выдели текст инструментом «Перенести» и передвинь снова.</p><div class="dialog-buttons"><button class="btn" type="button" id="cancelText">Отмена</button><button class="btn primary" type="submit">Добавить</button></div></form></dialog>
 <div id="toast" hidden role="status"></div>
 <script>
 (function(){
@@ -150,7 +150,7 @@ const KEY="meteli-drawing-studio-v1",SEED="AAAAAAAAAAAAAAAAAADMzMzMzMzMzMzMzMzMA
 const $=id=>document.getElementById(id),clamp=(n,a,b)=>Math.max(a,Math.min(b,Math.trunc(Number(n)||0)));
 const canvas=$("gridCanvas"),ctx=canvas.getContext("2d"),scroll=$("canvasScroll");
 const MAX_PROJECTS=35;
-let projects=[],activeId="",mode="draw",tool="paint",scale=12,undoStack=[],redoStack=[],dragging=false,dragChanged=false,dragBefore=null,lastPoint=null,renderQueued=false;
+let projects=[],activeId="",mode="draw",tool="paint",scale=12,undoStack=[],redoStack=[],dragging=false,dragChanged=false,dragBefore=null,lastPoint=null,renderQueued=false,selection=null,selectionAction=null,selectionStart=null,moveAnchor=null,movePreview=null,movePatch=null;
 const current=()=>projects.find(p=>p.id===activeId);
 const newId=()=>Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8);
 const snapshot=p=>Array.from(p.bits).join("");
@@ -160,28 +160,41 @@ function blank(name,w,h){return{id:newId(),name:String(name||"Моя схема"
 function load(){try{const state=JSON.parse(localStorage.getItem(KEY)||"null");if(state&&Array.isArray(state.projects)){projects=state.projects.filter(p=>p&&typeof p.name==="string"&&typeof p.bitmap==="string"&&Number.isInteger(p.w)&&Number.isInteger(p.h)&&p.w>=20&&p.w<=160&&p.h>=15&&p.h<=160&&p.bitmap.length===p.w*p.h&&/^[01]+$/.test(p.bitmap)).slice(0,MAX_PROJECTS).map(p=>({id:String(p.id),name:p.name.slice(0,60),w:p.w,h:p.h,bits:Uint8Array.from(p.bitmap,c=>c==="1"?1:0),progress:clamp(p.progress,0,p.w*p.h)}));activeId=String(state.activeId||"")}}catch(e){}if(!projects.length){projects=[fromSeed()];activeId=projects[0].id}if(!current())activeId=projects[0].id}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify({activeId,projects:projects.map(p=>({id:p.id,name:p.name,w:p.w,h:p.h,bitmap:snapshot(p),progress:p.progress}))}));$("statusSave").textContent="✓ сохранено"}catch(e){$("statusSave").textContent="⚠ не сохранено";alertToast("Место для сохранения закончилось. Скачай рисунок в файл.")}}
 function selector(){const s=$("projectPicker");s.replaceChildren();for(const p of projects){const opt=document.createElement("option");opt.value=p.id;opt.textContent=p.name+" · "+p.w+"×"+p.h;s.appendChild(opt)}s.value=activeId;$("drawingName").textContent=current().name;$("sizeLabel").textContent=current().w+" × "+current().h+" клетки";$("jumpRow").max=String(current().h);$("jumpCell").max=String(current().w);$("textY").max=String(current().h-1)}
-function switchProject(id){if(!projects.some(p=>p.id===id))return;activeId=id;undoStack=[];redoStack=[];persist();selector();schedule();showKnit();scroll.scrollLeft=0;scroll.scrollTop=0}
+function switchProject(id){if(!projects.some(p=>p.id===id))return;activeId=id;undoStack=[];redoStack=[];clearSelection();persist();selector();schedule();showKnit();scroll.scrollLeft=0;scroll.scrollTop=0}
 function stateCopy(p=current()){return{w:p.w,h:p.h,bits:p.bits.slice(),progress:p.progress}}
 function history(before){undoStack.push(before instanceof Uint8Array?{w:current().w,h:current().h,bits:before.slice(),progress:current().progress}:before);if(undoStack.length>40)undoStack.shift();redoStack.length=0;persist();updateUndo()}
 function updateUndo(){$("undo").disabled=!undoStack.length;$("redo").disabled=!redoStack.length}
-function restoreImage(state){const p=current();p.w=state.w;p.h=state.h;p.bits=state.bits.slice();p.progress=state.progress;persist();selector();schedule();showKnit();updateUndo()}
+function restoreImage(state){const p=current();p.w=state.w;p.h=state.h;p.bits=state.bits.slice();p.progress=state.progress;clearSelection();persist();selector();schedule();showKnit();updateUndo()}
 function doUndo(){if(!undoStack.length)return;redoStack.push(stateCopy());restoreImage(undoStack.pop())}
 function doRedo(){if(!redoStack.length)return;undoStack.push(stateCopy());restoreImage(redoStack.pop())}
 function resizedBits(p,w,h,anchor){const bits=new Uint8Array(w*h),dx=anchor==="center"?Math.floor((w-p.w)/2):0,dy=anchor==="center"?Math.floor((h-p.h)/2):0;let cropped=0;for(let y=0;y<p.h;y++)for(let x=0;x<p.w;x++){if(!p.bits[y*p.w+x])continue;const xx=x+dx,yy=y+dy;if(xx>=0&&xx<w&&yy>=0&&yy<h)bits[yy*w+xx]=1;else cropped++}return{bits,cropped}}
 function resizeCurrentProject(w,h,anchor){const p=current();if(w===p.w&&h===p.h){alertToast("Размер уже такой");return false}const {bits,cropped}=resizedBits(p,w,h,anchor);if(cropped>0||p.progress>0){let warning="Изменить размер с "+p.w+" × "+p.h+" на "+w+" × "+h+"?";if(cropped)warning+="\nПри этом будут обрезаны заполненные клетки: "+cropped+".";if(p.progress)warning+="\nСчётчик вязания начнётся с нуля.";warning+="\nИзменение можно отменить кнопкой «Отменить».";if(!confirm(warning))return false}
-const old=stateCopy(p);p.w=w;p.h=h;p.bits=bits;p.progress=0;history(old);selector();showKnit();schedule();scroll.scrollLeft=0;scroll.scrollTop=0;alertToast("Полотно: "+w+" × "+h+" клеток");return true}
+const old=stateCopy(p);p.w=w;p.h=h;p.bits=bits;p.progress=0;clearSelection();history(old);selector();showKnit();schedule();scroll.scrollLeft=0;scroll.scrollTop=0;alertToast("Полотно: "+w+" × "+h+" клеток");return true}
 function setMode(value){mode=value;$("tabDraw").classList.toggle("active",mode==="draw");$("tabKnit").classList.toggle("active",mode==="knit");$("tabDraw").setAttribute("aria-pressed",mode==="draw");$("tabKnit").setAttribute("aria-pressed",mode==="knit");$("editorPanel").hidden=mode!=="draw";$("knitPanel").hidden=mode!=="knit";updateTouch();schedule();if(mode==="knit")showKnit()}
-function setTool(value){tool=value;for(const [id,t] of [["toolPaint","paint"],["toolErase","erase"],["toolFill","fill"],["toolPan","pan"]]){$(id).classList.toggle("selected",t===tool);$(id).setAttribute("aria-pressed",t===tool)}$("drawHint").textContent=({paint:"Карандаш: проведи по клеткам, чтобы их закрасить.",erase:"Ластик: проведи по клеткам, чтобы сделать их пустыми.",fill:"Заливка: нажми на клетку, чтобы заполнить всю соседнюю область одинакового цвета.",pan:"Рука: двигай схему пальцем, чтобы найти нужную часть."})[tool];updateTouch()}
-function updateTouch(){canvas.style.touchAction=mode==="draw"&&tool!=="pan"?"none":"auto";canvas.style.cursor=mode==="draw"&&tool!=="pan"?"crosshair":"grab"}
+function clearSelection(){selection=null;selectionAction=null;selectionStart=null;moveAnchor=null;movePreview=null;movePatch=null;$("clearSelection").disabled=true;schedule()}
+function selectRect(x1,y1,x2,y2){return{x:Math.min(x1,x2),y:Math.min(y1,y2),w:Math.abs(x2-x1)+1,h:Math.abs(y2-y1)+1}}
+function selectedContains(pt){return selection&&pt.x>=selection.x&&pt.y>=selection.y&&pt.x<selection.x+selection.w&&pt.y<selection.y+selection.h}
+function extractSelection(p,area){const result=new Uint8Array(area.w*area.h);for(let y=0;y<area.h;y++)for(let x=0;x<area.w;x++)result[y*area.w+x]=p.bits[(area.y+y)*p.w+area.x+x];return result}
+function setTool(value){tool=value;for(const [id,t] of [["toolPaint","paint"],["toolErase","erase"],["toolMove","move"],["toolFill","fill"],["toolPan","pan"]]){$(id).classList.toggle("selected",t===tool);$(id).setAttribute("aria-pressed",t===tool)}$("drawHint").textContent=({paint:"Карандаш: проведи по клеткам, чтобы закрасить их.",erase:"Ластик: проведи по клеткам, чтобы их стереть.",move:"Перенести: обведи текст или узор, затем перетащи выделенную область. Новую надпись можно перетащить сразу.",fill:"Заливка: заполни соседнюю область одинакового цвета.",pan:"Рука: двигай схему пальцем, чтобы найти нужную часть."})[tool];if(value!=="move"&&selection)clearSelection();updateTouch()}
+function updateTouch(){canvas.style.touchAction=mode==="draw"&&tool!=="pan"?"none":"auto";canvas.style.cursor=mode==="draw"&&tool==="move"?"move":mode==="draw"&&tool!=="pan"?"crosshair":"grab"}
 const OFFSET_X=37,OFFSET_Y=29;
 function coords(e){const rect=canvas.getBoundingClientRect(),rx=(e.clientX-rect.left)*(canvas.width/rect.width),ry=(e.clientY-rect.top)*(canvas.height/rect.height);const x=Math.floor((rx-OFFSET_X)/scale),y=Math.floor((ry-OFFSET_Y)/scale),p=current();if(x<0||y<0||x>=p.w||y>=p.h)return null;return{x,y}}
 function index(p,x,y){return y*p.w+x}
 function paint(x,y,value){const p=current(),i=index(p,x,y);if(p.bits[i]===value)return false;p.bits[i]=value;return true}
 function paintLine(a,b,value){let x=a.x,y=a.y,dx=Math.abs(b.x-x),dy=Math.abs(b.y-y),sx=x<b.x?1:-1,sy=y<b.y?1:-1,err=dx-dy,changed=false;while(true){if(paint(x,y,value))changed=true;if(x===b.x&&y===b.y)break;const e=2*err;if(e>-dy){err-=dy;x+=sx}if(e<dx){err+=dx;y+=sy}}return changed}
 function flood(x,y){const p=current(),start=index(p,x,y),target=p.bits[start],value=target?0:1;if(target===value)return false;const queue=[start];p.bits[start]=value;for(let head=0;head<queue.length;head++){const n=queue[head],cx=n%p.w,cy=Math.floor(n/p.w);for(const next of [cx>0?n-1:-1,cx<p.w-1?n+1:-1,cy>0?n-p.w:-1,cy<p.h-1?n+p.w:-1]){if(next>=0&&p.bits[next]===target){p.bits[next]=value;queue.push(next)}}}return true}
-function handleStart(e){if(mode!=="draw"||tool==="pan")return;const pt=coords(e);if(!pt)return;e.preventDefault();dragBefore=current().bits.slice();dragChanged=false;lastPoint=pt;dragging=true;try{canvas.setPointerCapture(e.pointerId)}catch(err){}if(tool==="fill"){dragChanged=flood(pt.x,pt.y);endStroke();return}dragChanged=paint(pt.x,pt.y,tool==="paint"?1:0);schedule()}
-function handleMove(e){const pt=coords(e);if(pt)$("cellHint").textContent="Столбец "+(pt.x+1)+" · ряд "+(current().h-pt.y);if(!dragging||tool==="fill"||!pt||!lastPoint)return;e.preventDefault();if(paintLine(lastPoint,pt,tool==="paint"?1:0))dragChanged=true;lastPoint=pt;schedule()}
-function endStroke(){if(!dragging)return;dragging=false;lastPoint=null;if(dragChanged)history(dragBefore);dragBefore=null;schedule()}
+function handleStart(e){if(mode!=="draw"||tool==="pan")return;const pt=coords(e);if(!pt)return;e.preventDefault();dragging=true;dragChanged=false;lastPoint=pt;try{canvas.setPointerCapture(e.pointerId)}catch(err){}
+if(tool==="move"){if(selectedContains(pt)){selectionAction="move";moveAnchor=pt;movePreview={x:selection.x,y:selection.y};movePatch=extractSelection(current(),selection)}else{selectionAction="select";selectionStart=pt;selection={x:pt.x,y:pt.y,w:1,h:1};$("clearSelection").disabled=false}schedule();return}
+dragBefore=current().bits.slice();if(tool==="fill"){dragChanged=flood(pt.x,pt.y);endStroke();return}dragChanged=paint(pt.x,pt.y,tool==="paint"?1:0);schedule()}
+function handleMove(e){const pt=coords(e);if(pt)$("cellHint").textContent="Столбец "+(pt.x+1)+" · ряд "+(current().h-pt.y);if(!dragging||!pt)return;e.preventDefault();
+if(tool==="move"){if(selectionAction==="select"&&selectionStart){selection=selectRect(selectionStart.x,selectionStart.y,pt.x,pt.y);$("clearSelection").disabled=false}else if(selectionAction==="move"&&selection&&moveAnchor){const p=current();movePreview={x:clamp(selection.x+pt.x-moveAnchor.x,0,p.w-selection.w),y:clamp(selection.y+pt.y-moveAnchor.y,0,p.h-selection.h)}}schedule();return}
+if(tool==="fill"||!lastPoint)return;if(paintLine(lastPoint,pt,tool==="paint"?1:0))dragChanged=true;lastPoint=pt;schedule()}
+function endStroke(){if(!dragging)return;dragging=false;lastPoint=null;
+if(tool==="move"){if(selectionAction==="move"&&selection&&movePreview&&movePatch&&(selection.x!==movePreview.x||selection.y!==movePreview.y)){const p=current(),before=p.bits.slice(),a=selection,b=movePreview;
+for(let y=0;y<a.h;y++)for(let x=0;x<a.w;x++)p.bits[(a.y+y)*p.w+a.x+x]=0;
+for(let y=0;y<a.h;y++)for(let x=0;x<a.w;x++)if(movePatch[y*a.w+x])p.bits[(b.y+y)*p.w+b.x+x]=1;
+selection={x:b.x,y:b.y,w:a.w,h:a.h};history(before);alertToast("Выделенная область перемещена")}selectionAction=null;moveAnchor=null;movePreview=null;movePatch=null;selectionStart=null;schedule();return}
+if(dragChanged)history(dragBefore);dragBefore=null;schedule()}
 function loc(idx){const p=current(),r=Math.min(p.h-1,Math.floor(Math.min(idx,p.w*p.h-1)/p.w)),s=idx>=p.w*p.h?p.w-1:idx%p.w;return{r,s,x:r%2?s:p.w-1-s,y:p.h-1-r}}
 function ink(r,s){const p=current(),x=r%2?s:p.w-1-s;return p.bits[(p.h-1-r)*p.w+x]}
 function moveProgress(val){const p=current();p.progress=clamp(val,0,p.w*p.h);persist();showKnit();schedule()}
@@ -203,8 +216,9 @@ $("resizeProject").onclick=()=>{const p=current();$("resizeW").value=String(p.w)
 $("cancelResize").onclick=()=>$("resizeDialog").close();
 $("resizeForm").onsubmit=e=>{e.preventDefault();const w=Number($("resizeW").value),h=Number($("resizeH").value);if(!Number.isInteger(w)||!Number.isInteger(h)||w<20||w>160||h<15||h>160){alert("Размер: ширина от 20 до 160 клеток, высота от 15 до 160 рядов.");return}if(resizeCurrentProject(w,h,$("resizeAnchor").value))$("resizeDialog").close()};
 $("deleteProject").onclick=()=>{const p=current();if(!confirm("Точно удалить рисунок «"+p.name+"» и весь его прогресс? Сначала можно скачать файл."))return;projects=projects.filter(x=>x.id!==p.id);if(!projects.length)projects.push(blank("Моя схема",80,45));activeId=projects[0].id;undoStack=[];redoStack=[];persist();selector();schedule();showKnit();updateUndo()};
-$("clearAll").onclick=()=>{if(!confirm("Очистить ВСЕ клетки этого рисунка? Кнопка «Отменить» позволит вернуть узор."))return;const p=current(),before=p.bits.slice();p.bits.fill(0);history(before);schedule();alertToast("Сетка очищена")};
-for(const [id,value] of [["toolPaint","paint"],["toolErase","erase"],["toolFill","fill"],["toolPan","pan"]])$(id).onclick=()=>setTool(value);
+$("clearAll").onclick=()=>{if(!confirm("Очистить ВСЕ клетки этого рисунка? Кнопка «Отменить» позволит вернуть узор."))return;clearSelection();const p=current(),before=p.bits.slice();p.bits.fill(0);history(before);schedule();alertToast("Сетка очищена")};
+for(const [id,value] of [["toolPaint","paint"],["toolErase","erase"],["toolMove","move"],["toolFill","fill"],["toolPan","pan"]])$(id).onclick=()=>setTool(value);
+$("clearSelection").onclick=clearSelection;
 $("tabDraw").onclick=()=>setMode("draw");$("tabKnit").onclick=()=>setMode("knit");
 $("undo").onclick=doUndo;$("redo").onclick=doRedo;
 canvas.addEventListener("pointerdown",handleStart);
