@@ -104,7 +104,7 @@ dialog h3{font:normal 23px Georgia,serif;margin:0 0 11px}
 <button class="btn" id="addText">Текст с засечками</button><button class="btn" id="clearSelection" disabled>Снять выделение</button>
 <button class="btn warn" id="clearAll">Очистить</button>
 </div>
-<p class="tip" id="drawHint">Карандаш: проведи по клеткам, чтобы закрасить их. «Рука» позволяет прокручивать большую схему пальцем.</p>
+<div class="buttons" id="moveControls" style="margin-top:9px;display:none"><span class="meta" style="align-self:center;margin-right:5px">Сдвиг на 1 клетку:</span><button class="btn" id="nudgeLeft" aria-label="Сдвинуть влево">←</button><button class="btn" id="nudgeRight" aria-label="Сдвинуть вправо">→</button><button class="btn" id="nudgeUp" aria-label="Сдвинуть вверх">↑</button><button class="btn" id="nudgeDown" aria-label="Сдвинуть вниз">↓</button></div><p class="tip" id="drawHint">Карандаш: проведи по клеткам, чтобы закрасить их. «Рука» позволяет прокручивать большую схему пальцем.</p>
 </div>
 <div id="knitPanel" hidden>
 <div class="stats"><div class="stat"><b id="statRow">1 / 42</b><small>ряд</small></div><div class="stat"><b id="statCell">1 / 108</b><small>клетка</small></div><div class="stat"><b id="statPercent">0%</b><small>связано</small></div></div>
@@ -170,12 +170,13 @@ function doRedo(){if(!redoStack.length)return;undoStack.push(stateCopy());restor
 function resizedBits(p,w,h,anchor){const bits=new Uint8Array(w*h),dx=anchor==="center"?Math.floor((w-p.w)/2):0,dy=anchor==="center"?Math.floor((h-p.h)/2):0;let cropped=0;for(let y=0;y<p.h;y++)for(let x=0;x<p.w;x++){if(!p.bits[y*p.w+x])continue;const xx=x+dx,yy=y+dy;if(xx>=0&&xx<w&&yy>=0&&yy<h)bits[yy*w+xx]=1;else cropped++}return{bits,cropped}}
 function resizeCurrentProject(w,h,anchor){const p=current();if(w===p.w&&h===p.h){alertToast("Размер уже такой");return false}const {bits,cropped}=resizedBits(p,w,h,anchor);if(cropped>0||p.progress>0){let warning="Изменить размер с "+p.w+" × "+p.h+" на "+w+" × "+h+"?";if(cropped)warning+="\nПри этом будут обрезаны заполненные клетки: "+cropped+".";if(p.progress)warning+="\nСчётчик вязания начнётся с нуля.";warning+="\nИзменение можно отменить кнопкой «Отменить».";if(!confirm(warning))return false}
 const old=stateCopy(p);p.w=w;p.h=h;p.bits=bits;p.progress=0;clearSelection();history(old);selector();showKnit();schedule();scroll.scrollLeft=0;scroll.scrollTop=0;alertToast("Полотно: "+w+" × "+h+" клеток");return true}
-function setMode(value){mode=value;$("tabDraw").classList.toggle("active",mode==="draw");$("tabKnit").classList.toggle("active",mode==="knit");$("tabDraw").setAttribute("aria-pressed",mode==="draw");$("tabKnit").setAttribute("aria-pressed",mode==="knit");$("editorPanel").hidden=mode!=="draw";$("knitPanel").hidden=mode!=="knit";updateTouch();schedule();if(mode==="knit")showKnit()}
-function clearSelection(){selection=null;selectionAction=null;selectionStart=null;moveAnchor=null;movePreview=null;movePatch=null;$("clearSelection").disabled=true;schedule()}
+function setMode(value){mode=value;$("tabDraw").classList.toggle("active",mode==="draw");$("tabKnit").classList.toggle("active",mode==="knit");$("tabDraw").setAttribute("aria-pressed",mode==="draw");$("tabKnit").setAttribute("aria-pressed",mode==="knit");$("editorPanel").hidden=mode!=="draw";$("knitPanel").hidden=mode!=="knit";updateTouch();schedule();if(mode==="knit")showKnit();updateMoveControls()}
+function clearSelection(){selection=null;selectionAction=null;selectionStart=null;moveAnchor=null;movePreview=null;movePatch=null;$("clearSelection").disabled=true;updateMoveControls();schedule()}
+function updateMoveControls(){$("moveControls").style.display=mode==="draw"&&tool==="move"&&selection?"flex":"none"}
 function selectRect(x1,y1,x2,y2){return{x:Math.min(x1,x2),y:Math.min(y1,y2),w:Math.abs(x2-x1)+1,h:Math.abs(y2-y1)+1}}
 function selectedContains(pt){return selection&&pt.x>=selection.x&&pt.y>=selection.y&&pt.x<selection.x+selection.w&&pt.y<selection.y+selection.h}
 function extractSelection(p,area){const result=new Uint8Array(area.w*area.h);for(let y=0;y<area.h;y++)for(let x=0;x<area.w;x++)result[y*area.w+x]=p.bits[(area.y+y)*p.w+area.x+x];return result}
-function setTool(value){tool=value;for(const [id,t] of [["toolPaint","paint"],["toolErase","erase"],["toolMove","move"],["toolFill","fill"],["toolPan","pan"]]){$(id).classList.toggle("selected",t===tool);$(id).setAttribute("aria-pressed",t===tool)}$("drawHint").textContent=({paint:"Карандаш: проведи по клеткам, чтобы закрасить их.",erase:"Ластик: проведи по клеткам, чтобы их стереть.",move:"Перенести: обведи текст или узор, затем перетащи выделенную область. Новую надпись можно перетащить сразу.",fill:"Заливка: заполни соседнюю область одинакового цвета.",pan:"Рука: двигай схему пальцем, чтобы найти нужную часть."})[tool];if(value!=="move"&&selection)clearSelection();updateTouch()}
+function setTool(value){tool=value;for(const [id,t] of [["toolPaint","paint"],["toolErase","erase"],["toolMove","move"],["toolFill","fill"],["toolPan","pan"]]){$(id).classList.toggle("selected",t===tool);$(id).setAttribute("aria-pressed",t===tool)}$("drawHint").textContent=({paint:"Карандаш: проведи по клеткам, чтобы закрасить их.",erase:"Ластик: проведи по клеткам, чтобы их стереть.",move:"Перенести: обведи текст или узор, затем перетащи выделенную область. Новую надпись можно перетащить сразу.",fill:"Заливка: заполни соседнюю область одинакового цвета.",pan:"Рука: двигай схему пальцем, чтобы найти нужную часть."})[tool];if(value!=="move"&&selection)clearSelection();updateMoveControls();updateTouch()}
 function updateTouch(){canvas.style.touchAction=mode==="draw"&&tool!=="pan"?"none":"auto";canvas.style.cursor=mode==="draw"&&tool==="move"?"move":mode==="draw"&&tool!=="pan"?"crosshair":"grab"}
 const OFFSET_X=37,OFFSET_Y=29;
 function coords(e){const rect=canvas.getBoundingClientRect(),rx=(e.clientX-rect.left)*(canvas.width/rect.width),ry=(e.clientY-rect.top)*(canvas.height/rect.height);const x=Math.floor((rx-OFFSET_X)/scale),y=Math.floor((ry-OFFSET_Y)/scale),p=current();if(x<0||y<0||x>=p.w||y>=p.h)return null;return{x,y}}
@@ -184,16 +185,18 @@ function paint(x,y,value){const p=current(),i=index(p,x,y);if(p.bits[i]===value)
 function paintLine(a,b,value){let x=a.x,y=a.y,dx=Math.abs(b.x-x),dy=Math.abs(b.y-y),sx=x<b.x?1:-1,sy=y<b.y?1:-1,err=dx-dy,changed=false;while(true){if(paint(x,y,value))changed=true;if(x===b.x&&y===b.y)break;const e=2*err;if(e>-dy){err-=dy;x+=sx}if(e<dx){err+=dx;y+=sy}}return changed}
 function flood(x,y){const p=current(),start=index(p,x,y),target=p.bits[start],value=target?0:1;if(target===value)return false;const queue=[start];p.bits[start]=value;for(let head=0;head<queue.length;head++){const n=queue[head],cx=n%p.w,cy=Math.floor(n/p.w);for(const next of [cx>0?n-1:-1,cx<p.w-1?n+1:-1,cy>0?n-p.w:-1,cy<p.h-1?n+p.w:-1]){if(next>=0&&p.bits[next]===target){p.bits[next]=value;queue.push(next)}}}return true}
 function handleStart(e){if(mode!=="draw"||tool==="pan")return;const pt=coords(e);if(!pt)return;e.preventDefault();dragging=true;dragChanged=false;lastPoint=pt;try{canvas.setPointerCapture(e.pointerId)}catch(err){}
-if(tool==="move"){if(selectedContains(pt)){selectionAction="move";moveAnchor=pt;movePreview={x:selection.x,y:selection.y};movePatch=extractSelection(current(),selection)}else{selectionAction="select";selectionStart=pt;selection={x:pt.x,y:pt.y,w:1,h:1};$("clearSelection").disabled=false}schedule();return}
+if(tool==="move"){if(selectedContains(pt)){selectionAction="move";moveAnchor=pt;movePreview={x:selection.x,y:selection.y};movePatch=extractSelection(current(),selection)}else{selectionAction="select";selectionStart=pt;selection={x:pt.x,y:pt.y,w:1,h:1};$("clearSelection").disabled=false;updateMoveControls()}schedule();return}
 dragBefore=current().bits.slice();if(tool==="fill"){dragChanged=flood(pt.x,pt.y);endStroke();return}dragChanged=paint(pt.x,pt.y,tool==="paint"?1:0);schedule()}
 function handleMove(e){const pt=coords(e);if(pt)$("cellHint").textContent="Столбец "+(pt.x+1)+" · ряд "+(current().h-pt.y);if(!dragging||!pt)return;e.preventDefault();
 if(tool==="move"){if(selectionAction==="select"&&selectionStart){selection=selectRect(selectionStart.x,selectionStart.y,pt.x,pt.y);$("clearSelection").disabled=false}else if(selectionAction==="move"&&selection&&moveAnchor){const p=current();movePreview={x:clamp(selection.x+pt.x-moveAnchor.x,0,p.w-selection.w),y:clamp(selection.y+pt.y-moveAnchor.y,0,p.h-selection.h)}}schedule();return}
 if(tool==="fill"||!lastPoint)return;if(paintLine(lastPoint,pt,tool==="paint"?1:0))dragChanged=true;lastPoint=pt;schedule()}
+function performMove(x,y){if(!selection)return false;const p=current(),a=selection,b={x:clamp(x,0,p.w-a.w),y:clamp(y,0,p.h-a.h)};if(a.x===b.x&&a.y===b.y)return false;
+const original=p.bits.slice(),patch=extractSelection(p,a);
+for(let yy=0;yy<a.h;yy++)for(let xx=0;xx<a.w;xx++)p.bits[(a.y+yy)*p.w+a.x+xx]=0;
+for(let yy=0;yy<a.h;yy++)for(let xx=0;xx<a.w;xx++)if(patch[yy*a.w+xx])p.bits[(b.y+yy)*p.w+b.x+xx]=1;
+selection={x:b.x,y:b.y,w:a.w,h:a.h};history(original);schedule();return true}
 function endStroke(){if(!dragging)return;dragging=false;lastPoint=null;
-if(tool==="move"){if(selectionAction==="move"&&selection&&movePreview&&movePatch&&(selection.x!==movePreview.x||selection.y!==movePreview.y)){const p=current(),before=p.bits.slice(),a=selection,b=movePreview;
-for(let y=0;y<a.h;y++)for(let x=0;x<a.w;x++)p.bits[(a.y+y)*p.w+a.x+x]=0;
-for(let y=0;y<a.h;y++)for(let x=0;x<a.w;x++)if(movePatch[y*a.w+x])p.bits[(b.y+y)*p.w+b.x+x]=1;
-selection={x:b.x,y:b.y,w:a.w,h:a.h};history(before);alertToast("Выделенная область перемещена")}selectionAction=null;moveAnchor=null;movePreview=null;movePatch=null;selectionStart=null;schedule();return}
+if(tool==="move"){if(selectionAction==="move"&&selection&&movePreview&&movePatch&&(selection.x!==movePreview.x||selection.y!==movePreview.y)){if(performMove(movePreview.x,movePreview.y))alertToast("Выделенная область перемещена")}selectionAction=null;moveAnchor=null;movePreview=null;movePatch=null;selectionStart=null;schedule();return}
 if(dragChanged)history(dragBefore);dragBefore=null;schedule()}
 function loc(idx){const p=current(),r=Math.min(p.h-1,Math.floor(Math.min(idx,p.w*p.h-1)/p.w)),s=idx>=p.w*p.h?p.w-1:idx%p.w;return{r,s,x:r%2?s:p.w-1-s,y:p.h-1-r}}
 function ink(r,s){const p=current(),x=r%2?s:p.w-1-s;return p.bits[(p.h-1-r)*p.w+x]}
@@ -224,7 +227,7 @@ let changed=false,minX=tw,maxX=-1,minY=th,maxY=-1;
 for(let y=0;y<th;y++)for(let x=0;x<tw;x++)if(image[(y*tw+x)*4+3]>75){
 minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);
 if(paint(x+x0,y+top,1))changed=true}
-if(changed){history(before);if(maxX>=minX){selection={x:x0+minX,y:top+minY,w:maxX-minX+1,h:maxY-minY+1};$("clearSelection").disabled=false}
+if(changed){history(before);if(maxX>=minX){selection={x:x0+minX,y:top+minY,w:maxX-minX+1,h:maxY-minY+1};$("clearSelection").disabled=false;updateMoveControls()}
 setTool("move");schedule();alertToast("Перетащи надпись в нужное место!");return true}
 alertToast("Надпись уже есть на рисунке. Выдели её и перемести.");return false}
 function validImport(d){return d&&d.type==="meteli-custom-pattern"&&d.version===1&&Number.isInteger(d.w)&&Number.isInteger(d.h)&&d.w>=20&&d.w<=160&&d.h>=15&&d.h<=160&&typeof d.bitmap==="string"&&d.bitmap.length===d.w*d.h&&/^[01]+$/.test(d.bitmap)}
@@ -241,6 +244,7 @@ $("deleteProject").onclick=()=>{const p=current();if(!confirm("Точно уда
 $("clearAll").onclick=()=>{if(!confirm("Очистить ВСЕ клетки этого рисунка? Кнопка «Отменить» позволит вернуть узор."))return;clearSelection();const p=current(),before=p.bits.slice();p.bits.fill(0);history(before);schedule();alertToast("Сетка очищена")};
 for(const [id,value] of [["toolPaint","paint"],["toolErase","erase"],["toolMove","move"],["toolFill","fill"],["toolPan","pan"]])$(id).onclick=()=>setTool(value);
 $("clearSelection").onclick=clearSelection;
+for(const [id,dx,dy] of [["nudgeLeft",-1,0],["nudgeRight",1,0],["nudgeUp",0,-1],["nudgeDown",0,1]])$(id).onclick=()=>{if(selection)performMove(selection.x+dx,selection.y+dy)};
 $("tabDraw").onclick=()=>setMode("draw");$("tabKnit").onclick=()=>setMode("knit");
 $("undo").onclick=doUndo;$("redo").onclick=doRedo;
 canvas.addEventListener("pointerdown",handleStart);
@@ -264,7 +268,7 @@ $("exportJSON").onclick=()=>{const p=current(),data={type:"meteli-custom-pattern
 $("importJSON").onclick=()=>$("importFile").click();
 $("importFile").onchange=async e=>{try{const f=e.target.files[0];if(!f)return;const d=JSON.parse(await f.text());if(!validImport(d))throw Error("Файл должен быть рисунком из «Рисовалки»");if(projects.length>=MAX_PROJECTS)throw Error("Максимум 35 рисунков");const p=blank((d.name||"Загруженная схема").slice(0,60),d.w,d.h);p.bits=Uint8Array.from(d.bitmap,c=>c==="1"?1:0);p.progress=clamp(d.progress,0,d.w*d.h);projects.push(p);switchProject(p.id);alertToast("Рисунок загружен")}catch(err){alert("Не удалось загрузить: "+err.message)}e.target.value=""};
 $("exportPNG").onclick=imagePNG;$("printPage").onclick=()=>window.print();
-document.addEventListener("keydown",e=>{if(e.target.matches("input,select,textarea"))return;if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="z"){e.preventDefault();if(e.shiftKey)doRedo();else doUndo()}else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="y"){e.preventDefault();doRedo()}else if(mode==="knit"&&(e.key==="ArrowRight"||e.code==="Space")){e.preventDefault();moveProgress(current().progress+1)}else if(mode==="knit"&&e.key==="ArrowLeft"){e.preventDefault();moveProgress(current().progress-1)}});
+document.addEventListener("keydown",e=>{if(e.target.matches("input,select,textarea"))return;if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="z"){e.preventDefault();if(e.shiftKey)doRedo();else doUndo()}else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="y"){e.preventDefault();doRedo()}else if(mode==="draw"&&tool==="move"&&selection&&["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(e.key)){e.preventDefault();const shift={"ArrowLeft":[-1,0],"ArrowRight":[1,0],"ArrowUp":[0,-1],"ArrowDown":[0,1]}[e.key];performMove(selection.x+shift[0],selection.y+shift[1])}else if(mode==="knit"&&(e.key==="ArrowRight"||e.code==="Space")){e.preventDefault();moveProgress(current().progress+1)}else if(mode==="knit"&&e.key==="ArrowLeft"){e.preventDefault();moveProgress(current().progress-1)}});
 load();selector();updateUndo();setTool("paint");showKnit();persist();schedule();
 if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("./sw.js").catch(()=>{});
 })();
